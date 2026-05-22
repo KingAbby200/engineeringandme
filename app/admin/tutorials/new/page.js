@@ -231,6 +231,7 @@ export default function NewTutorialPage() {
                 <div>
                   <label style={labelStyle}>Content *</label>
                   <RichTextEditor
+                    key={`new-page-${activePage}`}
                     content={pages[activePage].content}
                     onChange={val => updatePage(activePage, 'content', val)}
                     placeholder="Write your tutorial content here…"

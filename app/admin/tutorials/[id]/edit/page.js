@@ -277,7 +277,7 @@ export default function EditTutorialPage() {
 
               <div>
                 <label style={labelStyle}>Content *</label>
-                <RichTextEditor content={pages[activePage].content} onChange={val => updatePage(activePage, 'content', val)} />
+                <RichTextEditor key={`edit-page-${pages[activePage]._id || activePage}`} content={pages[activePage].content} onChange={val => updatePage(activePage, 'content', val)} />
               </div>
 
               <div>

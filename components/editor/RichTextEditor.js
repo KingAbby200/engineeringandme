@@ -8,7 +8,8 @@ import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
-import { useState, useCallback, useRef } from 'react';
+import { Node } from '@tiptap/core';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Code, Link2, Image as ImageIcon,
@@ -37,6 +38,28 @@ const ToolbarButton = ({ onClick, active, title, children, disabled }) => (
 
 const Separator = () => <div style={{ width: 1, background: '#e5e7eb', margin: '0 0.25rem', alignSelf: 'stretch' }} />;
 
+// Custom math node for LaTeX rendering
+const MathNode = Node.create({
+  name: 'math',
+  group: 'inline',
+  content: 'text*',
+  marks: '',
+  inline: true,
+  atom: true,
+  addAttributes() {
+    return { latex: { default: '' }, isBlock: { default: false } };
+  },
+  parseHTML() {
+    return [
+      { tag: 'span[data-math]', getAttrs: el => ({ latex: el.getAttribute('data-math'), isBlock: el.classList.contains('math-block') }) },
+    ];
+  },
+  renderHTML({ node }) {
+    const attrs = { 'data-math': node.attrs.latex, class: node.attrs.isBlock ? 'math-block' : 'math-inline', contenteditable: 'false' };
+    return ['span', attrs, `$$${node.attrs.latex}$$`];
+  },
+});
+
 export default function RichTextEditor({ content, onChange, placeholder = 'Start writing your tutorial content...' }) {
   const [linkUrl, setLinkUrl] = useState('');
   const [showLinkInput, setShowLinkInput] = useState(false);
@@ -53,9 +76,13 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Image.configure({ resizable: true, allowBase64: true }),
       Link.configure({ openOnClick: false, autolink: true }),
+      MathNode,
     ],
     content: content || '',
-    onUpdate: ({ editor }) => { onChange && onChange(editor.getHTML()); },
+    onUpdate: ({ editor }) => { 
+      onChange && onChange(editor.getHTML()); 
+      setTimeout(() => renderMathInContent(), 0);
+    },
     editorProps: {
       attributes: { class: 'tutorial-content', style: 'min-height: 400px; outline: none; padding: 1rem;' },
       handlePaste: (view, event) => {
@@ -74,6 +101,40 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
       },
     },
   });
+
+  // Load and render KaTeX when content updates
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.katexLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js';
+      script.onload = () => {
+        window.katexLoaded = true;
+        renderMathInContent();
+      };
+      document.head.appendChild(script);
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css';
+      document.head.appendChild(link);
+    } else if (window.katexLoaded) {
+      renderMathInContent();
+    }
+  }, []);
+
+  const renderMathInContent = () => {
+    if (typeof window !== 'undefined' && window.katex) {
+      const mathElements = document.querySelectorAll('[data-math]');
+      mathElements.forEach(el => {
+        try {
+          const latex = el.getAttribute('data-math');
+          el.innerHTML = '';
+          window.katex.render(latex, el, { throwOnError: false, displayMode: el.classList.contains('math-block') });
+        } catch (e) {
+          console.error('KaTeX render error:', e);
+        }
+      });
+    }
+  };
 
   const uploadImage = useCallback(async (file) => {
     const formData = new FormData();
@@ -99,9 +160,13 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
   };
 
   const insertMath = () => {
-    const expr = prompt('Enter LaTeX expression:');
+    const expr = prompt('Enter LaTeX expression:\n\nExample: E = mc^2\nFor fractions: \\frac{x}{y}\nFor subscripts: x_0\nFor superscripts: x^2');
     if (expr) {
-      editor?.chain().focus().insertContent(`<code>$${expr}$</code>`).run();
+      editor?.chain().focus().insertContent({
+        type: 'math',
+        attrs: { latex: expr, isBlock: false },
+      }).run();
+      renderMathInContent();
     }
   };
 

@@ -6,6 +6,46 @@ export default function TutorialPageClient({ tutorialId, pageId }) {
   const { user } = useAuthStore();
   const tracked = useRef(false);
 
+  // Load KaTeX and render math equations
+  useEffect(() => {
+    // Load KaTeX CSS
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css';
+    document.head.appendChild(link);
+
+    // Load KaTeX JS
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js';
+    script.onload = () => {
+      renderMathInContent();
+    };
+    document.head.appendChild(script);
+
+    return () => {
+      // Keep the stylesheets loaded for persistence
+    };
+  }, []);
+
+  const renderMathInContent = () => {
+    if (typeof window !== 'undefined' && window.katex) {
+      const mathElements = document.querySelectorAll('[data-math]');
+      mathElements.forEach(el => {
+        try {
+          const latex = el.getAttribute('data-math');
+          el.innerHTML = '';
+          window.katex.render(latex, el, { 
+            throwOnError: false, 
+            displayMode: el.classList.contains('math-block') 
+          });
+        } catch (e) {
+          console.error('KaTeX render error:', e);
+          el.textContent = `${el.getAttribute('data-math')}`;
+        }
+      });
+    }
+  };
+
   // Reading progress bar
   useEffect(() => {
     const bar = document.createElement('div');
