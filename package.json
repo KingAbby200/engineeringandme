@@ -10,7 +10,7 @@
     "seed": "node lib/seed.js"
   },
   "dependencies": {
-    "@auth/mongodb-adapter": "^3.11.2",
+    "@auth/mongodb-adapter": "^2.4.0",
     "@hookform/resolvers": "^5.2.2",
     "@tiptap/extension-color": "^3.23.5",
     "@tiptap/extension-font-family": "^3.23.5",
@@ -35,7 +35,7 @@
     "next": "16.2.6",
     "next-auth": "^4.24.14",
     "next-sitemap": "^4.2.3",
-    "nodemailer": "^8.0.7",
+    "nodemailer": "^6.9.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.76.0",
