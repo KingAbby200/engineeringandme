@@ -116,7 +116,7 @@ export default async function HomePage() {
       {/* Why section */}
       <section style={{ padding: '3.5rem 1.25rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem', textAlign: 'center' }}>Why Engineering Tutorials?</h2>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem', textAlign: 'center' }}>Why Engineering & Me?</h2>
           <p style={{ color: '#6b7280', textAlign: 'center', margin: '0 0 2.5rem' }}>Built for serious engineering learners</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[

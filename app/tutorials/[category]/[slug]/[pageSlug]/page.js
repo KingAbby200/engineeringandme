@@ -4,13 +4,14 @@ import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/utils/auth';
 import User from '@/lib/models/User';
 import TutorialSidebar from '@/components/tutorial/TutorialSidebar';
+import PageNavigation from '@/components/tutorial/PageNavigation';
 import QuizSection from '@/components/tutorial/QuizSection';
 import TutorialPageClient from '@/components/tutorial/TutorialPageClient';
 import AdUnit from '@/components/ui/AdUnit';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ChevronLeft, ChevronRight, Clock, User as UserIcon, Calendar } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export async function generateMetadata({ params }) {
   const { slug, pageSlug } = await params;

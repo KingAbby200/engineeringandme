@@ -60,7 +60,7 @@ export default function Navbar() {
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', flexShrink: 0, marginRight: 'auto' }}>
           <Image src="/images/logo.png" alt="Engineering Tutorials Logo" width={36} height={36} style={{ objectFit: 'contain' }} />
           <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#111827', fontFamily: 'IBM Plex Sans, sans-serif' }} className="logo-text">
-            Engineering<span style={{ color: '#16a34a' }}>Tutorials</span>
+            Engineering<span style={{ color: '#16a34a' }}>&</span>Me
           </span>
         </Link>
 

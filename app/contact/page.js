@@ -44,7 +44,7 @@ export default function ContactPage() {
         {/* Info cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
-            { icon: <Mail size={20} />, title: 'Email Us', detail: 'contact@engineeringtutorials.com', sub: 'We reply within 24 hours' },
+            { icon: <Mail size={20} />, title: 'Email Us', detail: 'contact.engineeringandme@gmail.com', sub: 'We reply within 24 hours' },
             { icon: <Clock size={20} />, title: 'Support Hours', detail: 'Mon – Fri, 9am – 6pm WAT', sub: 'West Africa Time (UTC+1)' },
             { icon: <MapPin size={20} />, title: 'Based Online', detail: 'Global Engineering Community', sub: 'Serving learners worldwide' },
           ].map(item => (
@@ -63,7 +63,7 @@ export default function ContactPage() {
             <p style={{ color: '#166534', fontSize: '0.8rem', margin: '0 0 0.75rem', lineHeight: 1.6 }}>
               If you're an engineer with expertise to share, reach out about becoming an author on our platform.
             </p>
-            <p style={{ color: '#15803d', fontSize: '0.8rem', fontWeight: 600, margin: 0 }}>authors@engineeringtutorials.com</p>
+            <p style={{ color: '#15803d', fontSize: '0.8rem', fontWeight: 600, margin: 0 }}>authors.engineeringandme@gmail.com</p>
           </div>
         </div>
 

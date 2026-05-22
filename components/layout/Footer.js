@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
-import { BookOpen, Mail, Globe, Rss, GitBranch } from 'lucide-react';
+import Image from 'next/image';
+import { Mail, Globe, Rss, GitBranch } from 'lucide-react';
 import NewsletterForm from '@/components/ui/NewsletterForm';
 
 const FOOTER_LINKS = {
@@ -35,9 +36,9 @@ export default function Footer() {
           <div style={{ gridColumn: 'span 1' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
               <div style={{ width: 36, height: 36, background: '#16a34a', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <BookOpen size={20} color="white" />
+                <Image src="/images/logo.png" alt="Engineering Tutorials Logo" width={36} height={36} style={{ objectFit: 'contain' }} />
               </div>
-              <span style={{ fontWeight: 700, color: 'white', fontSize: '1rem' }}>Engineering<span style={{ color: '#22c55e' }}>Tutorials</span></span>
+              <span style={{ fontWeight: 700, color: 'white', fontSize: '1rem' }}>Engineering<span style={{ color: '#22c55e' }}>&</span>Me</span>
             </div>
             <p style={{ fontSize: '0.875rem', lineHeight: 1.7, color: '#94a3b8', marginBottom: '1.25rem' }}>
               Free, structured engineering tutorials across all disciplines. Learn at your own pace with quizzes and progress tracking.
