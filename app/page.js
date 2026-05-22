@@ -40,7 +40,7 @@ export default async function HomePage() {
             <span style={{ color: '#22c55e' }}>One Tutorial at a Time</span>
           </h1>
           <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#94a3b8', maxWidth: 600, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
-            Structured, in-depth tutorials across all engineering disciplines. From circuit theory to structural analysis — learn at your own pace, track your progress, test your knowledge.
+            Structured, in-depth tutorials across all engineering disciplines. From circuit theory to structural analysis. Learn at your own pace, track your progress, test your knowledge.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/tutorials" style={{ padding: '0.85rem 2rem', background: '#16a34a', color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: '1rem', transition: 'background 0.15s', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
