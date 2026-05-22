@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  --primary: #16a34a;
+  --primary-dark: #15803d;
+  --primary-light: #22c55e;
+  --primary-pale: #f0fdf4;
+  --primary-border: #bbf7d0;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --border: #e5e7eb;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --radius: 8px;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-serif: 'Merriweather', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tutorial content styles */
+.tutorial-content h1 { font-size: 2rem; font-weight: 700; margin: 1.5rem 0 0.75rem; font-family: var(--font-serif); }
+.tutorial-content h2 { font-size: 1.5rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--primary-dark); border-bottom: 2px solid var(--primary-border); padding-bottom: 0.4rem; }
+.tutorial-content h3 { font-size: 1.25rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+.tutorial-content h4 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 0.4rem; }
+.tutorial-content p { margin: 0.75rem 0; line-height: 1.8; color: #1f2937; }
+.tutorial-content ul, .tutorial-content ol { margin: 0.75rem 0 0.75rem 1.5rem; }
+.tutorial-content li { margin: 0.3rem 0; }
+.tutorial-content code { font-family: var(--font-mono); background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.875em; color: #15803d; }
+.tutorial-content pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 1.25rem; overflow-x: auto; margin: 1rem 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.7; }
+.tutorial-content pre code { background: none; border: none; padding: 0; color: inherit; }
+.tutorial-content blockquote { border-left: 4px solid var(--primary); background: var(--primary-pale); padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; color: #166534; font-style: italic; }
+.tutorial-content img { max-width: 100%; border-radius: 8px; margin: 1rem 0; box-shadow: var(--shadow-md); }
+.tutorial-content a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+.tutorial-content a:hover { color: var(--primary-dark); }
+.tutorial-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+.tutorial-content th { background: var(--primary); color: white; padding: 0.6rem 1rem; text-align: left; }
+.tutorial-content td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
+.tutorial-content tr:nth-child(even) { background: var(--bg-secondary); }
+.tutorial-content .math-block { overflow-x: auto; text-align: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; margin: 1rem 0; }
+.tutorial-content hr { border: none; border-top: 2px solid var(--border); margin: 1.5rem 0; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Editor styles */
+.ProseMirror { min-height: 400px; outline: none; padding: 1rem; }
+.ProseMirror p.is-editor-empty:first-child::before { color: #9ca3af; content: attr(data-placeholder); float: left; height: 0; pointer-events: none; }
+.ProseMirror img { max-width: 100%; cursor: pointer; }
+.ProseMirror img.ProseMirror-selectednode { outline: 3px solid var(--primary); }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes pulse-green { 0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.3); } 50% { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); } }
+
+.animate-fade-in { animation: fadeIn 0.4s ease; }
+.animate-slide-in { animation: slideIn 0.3s ease; }
+.streak-pulse { animation: pulse-green 2s infinite; }
+
+/* Cookie banner */
+.cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; z-index: 9999; padding: 1rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+/* Progress bar */
+.reading-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary); z-index: 100; transition: width 0.1s; }
+
+/* Drawer overlay */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
+
+/* Quiz styles */
+.quiz-option { transition: all 0.2s; cursor: pointer; }
+.quiz-option:hover { border-color: var(--primary); background: var(--primary-pale); }
+.quiz-option.correct { border-color: #16a34a; background: #f0fdf4; color: #166534; }
+.quiz-option.incorrect { border-color: #dc2626; background: #fef2f2; color: #991b1b; }
+
+/* Tiptap editor toolbar */
+.editor-toolbar button { padding: 0.35rem 0.5rem; border-radius: 4px; border: none; background: transparent; cursor: pointer; font-size: 0.875rem; color: #374151; transition: background 0.15s; }
+.editor-toolbar button:hover, .editor-toolbar button.active { background: var(--primary-pale); color: var(--primary-dark); }
+.editor-toolbar .separator { width: 1px; background: var(--border); margin: 0 0.25rem; align-self: stretch; }
+
+/* Tailwind v4 custom theme tokens */
+@theme {
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+  --font-family-sans: 'IBM Plex Sans', sans-serif;
+  --font-family-mono: 'IBM Plex Mono', monospace;
+  --font-family-serif: 'Merriweather', serif;
+}
