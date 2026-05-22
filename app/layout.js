@@ -1,5 +1,6 @@
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CookieBanner from '@/components/ui/CookieBanner';
@@ -70,6 +71,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Navbar />
+        <Analytics />
         <main style={{ minHeight: 'calc(100vh - 64px - 280px)' }}>
           {children}
         </main>
