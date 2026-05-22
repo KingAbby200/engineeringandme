@@ -26,7 +26,7 @@ export async function POST(request, { params }) {
     if (authUser.role !== 'admin' && tutorial.author.toString() !== authUser.id) return apiError('Forbidden', 403);
 
     const { title, content, order, quiz, metaDescription } = await request.json();
-    if (!title || !content) return apiError('Title and content required');
+    if (!title || !content) return apiError('Title and content are required', 400);
 
     const slug = slugify(title);
     const existingPages = await TutorialPage.countDocuments({ tutorial: id });
@@ -34,7 +34,8 @@ export async function POST(request, { params }) {
 
     const page = new TutorialPage({
       tutorial: id,
-      title, content,
+      title,
+      content,
       slug: `${slug}-${Date.now()}`,
       order: order || existingPages + 1,
       quiz: quiz || { enabled: false, questions: [] },
@@ -48,6 +49,6 @@ export async function POST(request, { params }) {
     return apiResponse({ page }, 201);
   } catch (err) {
     console.error('Create page error:', err);
-    return apiError('Server error', 500);
+    return apiError(err.message || 'Server error', 500);
   }
 }

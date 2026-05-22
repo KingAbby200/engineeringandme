@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
     await connectDB();
     const tutorial = await Tutorial.findOne({ slug }).populate('category', 'name');
     const page = await TutorialPage.findOne({ slug: pageSlug, tutorial: tutorial?._id });
-    if (!tutorial || !page) return { title: 'Tutorial Page' };
+    if (!tutorial || !page || !page.content) return { title: 'Tutorial Page Not Found' };
     return {
       title: `${page.title} – ${tutorial.title}`,
       description: page.metaDescription || `Learn about ${page.title} in this ${tutorial.title} tutorial.`,
@@ -30,7 +30,10 @@ export async function generateMetadata({ params }) {
       },
       alternates: { canonical: `/tutorials/${tutorial.category?.slug}/${slug}/${pageSlug}` },
     };
-  } catch { return { title: 'Tutorial Page' }; }
+  } catch (err) {
+    console.error('Metadata generation error:', err);
+    return { title: 'Tutorial Page' };
+  }
 }
 
 export default async function TutorialPageView({ params }) {
@@ -44,8 +47,18 @@ export default async function TutorialPageView({ params }) {
   if (!tutorial) notFound();
 
   const pages = await TutorialPage.find({ tutorial: tutorial._id }).sort({ order: 1 });
+  if (!pages || pages.length === 0) notFound();
+  
   const currentPage = pages.find(p => p.slug === pageSlug);
-  if (!currentPage) notFound();
+  if (!currentPage) {
+    console.warn(`Page slug not found: ${pageSlug}. Available slugs: ${pages.map(p => p.slug).join(', ')}`);
+    notFound();
+  }
+  
+  if (!currentPage.content || currentPage.content.trim() === '') {
+    console.error(`Page has empty content: tutorial=${tutorial.slug}, page=${pageSlug}`);
+    notFound();
+  }
 
   const currentIndex = pages.findIndex(p => p.slug === pageSlug);
   const prevPage = pages[currentIndex - 1] || null;
@@ -125,7 +138,7 @@ export default async function TutorialPageView({ params }) {
           {/* Tutorial content */}
           <div
             className="tutorial-content"
-            dangerouslySetInnerHTML={{ __html: currentPage.content }}
+            dangerouslySetInnerHTML={{ __html: currentPage.content || '<p>No content available</p>' }}
           />
 
           {/* Ad after content */}

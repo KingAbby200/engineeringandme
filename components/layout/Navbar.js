@@ -23,7 +23,7 @@ export default function Navbar() {
   const { user, fetchUser, logout } = useAuthStore();
   const dropdownRef = useRef(null);
 
-  useEffect(() => { fetchUser(); }, []);
+  useEffect(() => { fetchUser(); }, [fetchUser]);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', onScroll);
@@ -58,9 +58,7 @@ export default function Navbar() {
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.25rem', display: 'flex', alignItems: 'center', height: '64px', gap: '1rem' }}>
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', flexShrink: 0, marginRight: 'auto' }}>
-          <div style={{ width: 36, height: 36, background: 'linear-gradient(135deg, #16a34a, #22c55e)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <BookOpen size={20} color="white" />
-          </div>
+          <Image src="/images/logo.png" alt="Engineering Tutorials Logo" width={36} height={36} style={{ objectFit: 'contain' }} />
           <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#111827', fontFamily: 'IBM Plex Sans, sans-serif' }} className="logo-text">
             Engineering<span style={{ color: '#16a34a' }}>Tutorials</span>
           </span>

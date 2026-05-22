@@ -8,9 +8,11 @@ export async function GET(request, { params }) {
     const { id, pageId } = await params;
     const page = await TutorialPage.findOne({ _id: pageId, tutorial: id });
     if (!page) return apiError('Page not found', 404);
+    if (!page.content) return apiError('Page content not available', 422);
     return apiResponse({ page });
   } catch (err) {
-    return apiError('Server error', 500);
+    console.error('Get page error:', err);
+    return apiError(err.message || 'Server error', 500);
   }
 }
 
@@ -27,16 +29,25 @@ export async function PUT(request, { params }) {
 
     const { title, content, order, quiz, metaDescription } = await request.json();
     const updates = {};
-    if (title) { updates.title = title; updates.slug = `${slugify(title)}-${pageId.slice(-6)}`; }
-    if (content) { updates.content = content; updates.readingTime = generateReadingTime(content); }
+    if (title) { 
+      updates.title = title; 
+      updates.slug = `${slugify(title)}-${pageId.slice(-6)}`; 
+    }
+    if (content !== undefined && content !== null) { 
+      if (!content.trim()) return apiError('Content cannot be empty', 400);
+      updates.content = content; 
+      updates.readingTime = generateReadingTime(content); 
+    }
     if (order !== undefined) updates.order = order;
     if (quiz !== undefined) updates.quiz = quiz;
     if (metaDescription !== undefined) updates.metaDescription = metaDescription;
 
     const page = await TutorialPage.findByIdAndUpdate(pageId, updates, { new: true });
+    if (!page) return apiError('Page not found', 404);
     return apiResponse({ page });
   } catch (err) {
-    return apiError('Server error', 500);
+    console.error('Update page error:', err);
+    return apiError(err.message || 'Server error', 500);
   }
 }
 
