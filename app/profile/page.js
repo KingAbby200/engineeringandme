@@ -65,7 +65,7 @@ export default function ProfilePage() {
   };
 
   const avatarUrl = (editing ? form.avatar : user.avatar) ||
-    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name || 'U')}&backgroundColor=16a34a`;
+    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name || 'U') || 'Aneka'}&backgroundColor=16a34a`;
 
   const completed = user.progress?.filter(p => p.percentComplete >= 100) || [];
   const inProgress = user.progress?.filter(p => p.percentComplete > 0 && p.percentComplete < 100) || [];

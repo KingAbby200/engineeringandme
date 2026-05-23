@@ -27,9 +27,9 @@ export const metadata = {
     siteName: 'Engineering & Me',
     title: 'Engineering & Me. Learn Engineering Online',
     description: 'Free, comprehensive engineering tutorials for all disciplines. Structured learning with quizzes and progress tracking.',
-    images: [{ url: '/logo.png', width: 1200, height: 630, alt: 'Engineering Tutorials' }],
+    images: [{ url: '/images/logo.png', width: 1200, height: 630, alt: 'Engineering Tutorials' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Engineering & Me', description: 'Free engineering tutorials for all disciplines.', images: ['/logo.png'], creator: '@EngineeringandMe' },
+  twitter: { card: 'summary_large_image', title: 'Engineering & Me', description: 'Free engineering tutorials for all disciplines.', images: ['/images/logo.png'], creator: '@EngineeringandMe' },
   verification: { google: 'your-google-verification-code' },
 };
 
