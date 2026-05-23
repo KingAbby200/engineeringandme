@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/store/authStore';
 import { User, Flame, Trophy, BookOpen, CheckCircle, Edit2, Save, X, Camera } from 'lucide-react';
@@ -65,7 +64,7 @@ export default function ProfilePage() {
   };
 
   const avatarUrl = (editing ? form.avatar : user.avatar) ||
-    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name || 'U') || 'Aneka'}&backgroundColor=16a34a`;
+    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name || 'U')}&backgroundColor=16a34a`;
 
   const completed = user.progress?.filter(p => p.percentComplete >= 100) || [];
   const inProgress = user.progress?.filter(p => p.percentComplete > 0 && p.percentComplete < 100) || [];
@@ -76,7 +75,7 @@ export default function ProfilePage() {
       <div style={{ background: 'white', borderRadius: 12, border: '1.5px solid #e5e7eb', padding: '2rem', marginBottom: '1.5rem', display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
         {/* Avatar */}
         <div style={{ position: 'relative', flexShrink: 0 }}>
-          <Image src={avatarUrl} alt={user.name} width={96} height={96} style={{ borderRadius: '50%', border: '3px solid #16a34a', objectFit: 'cover' }} />
+          <img src={avatarUrl} alt={user.name} width={96} height={96} style={{ borderRadius: '50%', border: '3px solid #16a34a', objectFit: 'cover' }} />
           {editing && (
             <button onClick={() => setShowAvatarPicker(!showAvatarPicker)}
               style={{ position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, background: '#16a34a', color: 'white', border: '2px solid white', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -91,7 +90,7 @@ export default function ProfilePage() {
             {AVATARS.map(av => (
               <button key={av} type="button" onClick={() => { setForm(f => ({ ...f, avatar: av })); setShowAvatarPicker(false); }}
                 style={{ padding: 4, borderRadius: 8, border: `2px solid ${form.avatar === av ? '#16a34a' : 'transparent'}`, cursor: 'pointer', background: 'none' }}>
-                <Image src={av} alt="avatar" width={56} height={56} style={{ borderRadius: '50%' }} />
+                <img src={av} alt="avatar" width={56} height={56} style={{ borderRadius: '50%' }} />
               </button>
             ))}
           </div>
