@@ -160,7 +160,7 @@ export default function Navbar() {
         {user ? (
           <div ref={dropdownRef} style={{ position: 'relative' }} className="auth-container">
             <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: '1.5px solid var(--border)', borderRadius: 8, padding: '0.3rem 0.6rem', cursor: 'pointer', transition: 'border-color 0.15s' }}>
-              <Image src={avatarUrl} alt={user.name} width={28} height={28} style={{ borderRadius: '50%', objectFit: 'cover' }} unoptimized />
+              <img src={avatarUrl} alt={user.name} width={28} height={28} style={{ borderRadius: '50%', objectFit: 'cover' }} />
               <span style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="user-name">
                 {user.name?.split(' ')[0]}
               </span>
@@ -256,8 +256,8 @@ export default function Navbar() {
           .spacer-desktop { display: none !important; }
           .search-container { display: none !important; }
           .search-button { display: none !important; }
-          .auth-container { display: none !important; }
-          .auth-buttons { display: none !important; }
+          .auth-container { display: flex !important; }
+          .auth-buttons { display: flex !important; }
           .user-name { display: none !important; }
           .streak-badge { display: none !important; }
           .logo-text { font-size: 0.9rem; }

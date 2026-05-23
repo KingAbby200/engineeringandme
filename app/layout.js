@@ -51,7 +51,21 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_URL} />
+        <link rel="canonical" href={SITE_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Engineering & Me. Learn Engineering Online" />
+        <meta property="og:description" content="Free, comprehensive engineering tutorials for all disciplines. Structured learning with quizzes and progress tracking." />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:image" content={`${SITE_URL}/images/logo.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Engineering Tutorials" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Engineering & Me" />
+        <meta name="twitter:description" content="Free engineering tutorials for all disciplines." />
+        <meta name="twitter:image" content={`${SITE_URL}/images/logo.png`} />
+        <meta name="twitter:image:alt" content="Engineering Tutorials" />
+        <meta name="twitter:creator" content="@EngineeringandMe" />
         {adsenseId && (
           <Script
             async
