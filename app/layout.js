@@ -85,6 +85,12 @@ export default function RootLayout({ children }) {
           <Analytics />
           <main style={{ minHeight: 'calc(100vh - 64px - 280px)' }}>
             {children}
+            {/* Adsterra Social Bar Global Script */}
+            <Script
+              id="adsterra-social-bar"
+              strategy="afterInteractive" 
+              src="https://pl29530696.effectivecpmnetwork.com/8a/da/e7/8adae729a79f14122ce9c21b57166e51.js"
+            />
           </main>
           <Footer />
           <CookieBanner />

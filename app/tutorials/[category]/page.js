@@ -2,7 +2,8 @@ import { connectDB } from '@/lib/mongodb';
 import { Tutorial } from '@/lib/models/Tutorial';
 import Category from '@/lib/models/Category';
 import TutorialCard from '@/components/tutorial/TutorialCard';
-import AdUnit from '@/components/ui/AdUnit';
+//import AdUnit from '@/components/ui/AdUnit';
+import AdsterraNative from '@components/ui/AdsterraNative';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BookOpen, Filter } from 'lucide-react';
@@ -102,7 +103,8 @@ export default async function CategoryPage({ params, searchParams }) {
 
           {/* Ad */}
           <div style={{ marginBottom: '1.5rem' }}>
-            <AdUnit slot="2345678901" format="horizontal" />
+            {/*<AdUnit slot="2345678901" format="horizontal" />*/}
+            <AdsterraNative />
           </div>
 
           {/* Tutorials grid */}

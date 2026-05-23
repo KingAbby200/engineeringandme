@@ -7,7 +7,8 @@ import TutorialSidebar from '@/components/tutorial/TutorialSidebar';
 import PageNavigation from '@/components/tutorial/PageNavigation';
 import QuizSection from '@/components/tutorial/QuizSection';
 import TutorialPageClient from '@/components/tutorial/TutorialPageClient';
-import AdUnit from '@/components/ui/AdUnit';
+//import AdUnit from '@/components/ui/AdUnit';
+import AdsterraNative from '@components/ui/AdsterraNative';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -133,7 +134,8 @@ export default async function TutorialPageView({ params }) {
 
           {/* Ad before content */}
           <div style={{ marginBottom: '1.5rem' }}>
-            <AdUnit slot="3456789012" format="horizontal" />
+            {/*<AdUnit slot="3456789012" format="horizontal" />*/}
+            <AdsterraNative />
           </div>
 
           {/* Tutorial content */}
@@ -144,7 +146,8 @@ export default async function TutorialPageView({ params }) {
 
           {/* Ad after content */}
           <div style={{ margin: '2rem 0' }}>
-            <AdUnit slot="4567890123" format="rectangle" style={{ maxWidth: 400, margin: '0 auto' }} />
+            {/*<AdUnit slot="4567890123" format="rectangle" style={{ maxWidth: 400, margin: '0 auto' }} />*/}
+            <AdsterraNative />
           </div>
 
           {/* Quiz */}

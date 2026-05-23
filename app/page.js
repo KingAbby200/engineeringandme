@@ -5,7 +5,8 @@ import { Tutorial } from '@/lib/models/Tutorial';
 import Category from '@/lib/models/Category';
 import TutorialCard from '@/components/tutorial/TutorialCard';
 import NewsletterForm from '@/components/ui/NewsletterForm';
-import AdUnit from '@/components/ui/AdUnit';
+//import AdUnit from '@/components/ui/AdUnit';
+import AdsterraNative from '@/components/ui/AdsterraNative';
 import CategoryCard from '@/components/ui/CategoryCard';
 import { BookOpen, Zap, Trophy, Users, ArrowRight, CheckCircle } from 'lucide-react';
 
@@ -82,7 +83,8 @@ export default async function HomePage() {
 
       {/* Ad banner */}
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.25rem' }}>
-        <AdUnit slot="1234567890" format="horizontal" style={{ marginTop: '1rem' }} />
+        {/*<AdUnit slot="1234567890" format="horizontal" style={{ marginTop: '1rem' }} /> */}
+        <AdsterraNative />
       </div>
 
       {/* Featured / Recent tutorials */}
