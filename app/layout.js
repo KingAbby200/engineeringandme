@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CookieBanner from '@/components/ui/CookieBanner';
+import ThemeProvider from '@/components/providers/ThemeProvider';
 import Script from 'next/script';
 
 export const metadata = {
@@ -79,14 +80,16 @@ export default function RootLayout({ children }) {
         }) }} />
       </head>
       <body>
-        <Navbar />
-        <Analytics />
-        <main style={{ minHeight: 'calc(100vh - 64px - 280px)' }}>
-          {children}
-        </main>
-        <Footer />
-        <CookieBanner />
-        <Toaster position="bottom-right" toastOptions={{ style: { fontFamily: 'IBM Plex Sans, sans-serif', fontSize: '14px' }, success: { iconTheme: { primary: '#16a34a', secondary: '#fff' } } }} />
+        <ThemeProvider>
+          <Navbar />
+          <Analytics />
+          <main style={{ minHeight: 'calc(100vh - 64px - 280px)' }}>
+            {children}
+          </main>
+          <Footer />
+          <CookieBanner />
+          <Toaster position="bottom-right" toastOptions={{ style: { fontFamily: 'IBM Plex Sans, sans-serif', fontSize: '14px' }, success: { iconTheme: { primary: '#16a34a', secondary: '#fff' } } }} />
+        </ThemeProvider>
       </body>
     </html>
   );

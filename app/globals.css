@@ -22,6 +22,24 @@
   --font-serif: 'Merriweather', serif;
 }
 
+/* Dark mode */
+[data-theme='dark'] {
+  --primary: #22c55e;
+  --primary-dark: #16a34a;
+  --primary-light: #86efac;
+  --primary-pale: #0c3f1c;
+  --primary-border: #166534;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --bg-tertiary: #374151;
+  --border: #4b5563;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -35,17 +53,19 @@ body {
 }
 
 /* Tutorial content styles */
-.tutorial-content h1 { font-size: 2rem; font-weight: 700; margin: 1.5rem 0 0.75rem; font-family: var(--font-serif); }
+.tutorial-content h1 { font-size: 2rem; font-weight: 700; margin: 1.5rem 0 0.75rem; font-family: var(--font-serif); color: var(--text-primary); }
 .tutorial-content h2 { font-size: 1.5rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--primary-dark); border-bottom: 2px solid var(--primary-border); padding-bottom: 0.4rem; }
-.tutorial-content h3 { font-size: 1.25rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
-.tutorial-content h4 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 0.4rem; }
-.tutorial-content p { margin: 0.75rem 0; line-height: 1.8; color: #1f2937; }
-.tutorial-content ul, .tutorial-content ol { margin: 0.75rem 0 0.75rem 1.5rem; }
-.tutorial-content li { margin: 0.3rem 0; }
+.tutorial-content h3 { font-size: 1.25rem; font-weight: 600; margin: 1.25rem 0 0.5rem; color: var(--text-primary); }
+.tutorial-content h4 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 0.4rem; color: var(--text-primary); }
+.tutorial-content p { margin: 0.75rem 0; line-height: 1.8; color: var(--text-primary); }
+.tutorial-content ul, .tutorial-content ol { margin: 0.75rem 0 0.75rem 1.5rem; color: var(--text-primary); }
+.tutorial-content li { margin: 0.3rem 0; color: var(--text-primary); }
 .tutorial-content code { font-family: var(--font-mono); background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.875em; color: #15803d; }
+[data-theme='dark'] .tutorial-content code { background: #0c3f1c; border: 1px solid #166534; color: #86efac; }
 .tutorial-content pre { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 1.25rem; overflow-x: auto; margin: 1rem 0; font-family: var(--font-mono); font-size: 0.875rem; line-height: 1.7; }
 .tutorial-content pre code { background: none; border: none; padding: 0; color: inherit; }
 .tutorial-content blockquote { border-left: 4px solid var(--primary); background: var(--primary-pale); padding: 1rem 1.25rem; margin: 1rem 0; border-radius: 0 8px 8px 0; color: #166534; font-style: italic; }
+[data-theme='dark'] .tutorial-content blockquote { color: #86efac; }
 .tutorial-content img { max-width: 100%; border-radius: 8px; margin: 1rem 0; box-shadow: var(--shadow-md); }
 .tutorial-content a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
 .tutorial-content a:hover { color: var(--primary-dark); }

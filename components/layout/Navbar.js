@@ -4,7 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
-import { Menu, X, Search, ChevronDown, BookOpen, User, LogOut, Settings, LayoutDashboard, Flame } from 'lucide-react';
+import { useThemeStore } from '@/lib/store/themeStore';
+import { useLanguageStore, supportedLanguages } from '@/lib/store/languageStore';
+import { Menu, X, Search, ChevronDown, BookOpen, User, LogOut, Settings, LayoutDashboard, Flame, Moon, Sun, Globe } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
@@ -18,10 +20,16 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const [themeDropdown, setThemeDropdown] = useState(false);
+  const [langDropdown, setLangDropdown] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { user, fetchUser, logout } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
+  const { language, setLanguage } = useLanguageStore();
   const dropdownRef = useRef(null);
+  const themeRef = useRef(null);
+  const langRef = useRef(null);
 
   useEffect(() => { fetchUser(); }, [fetchUser]);
   useEffect(() => {
@@ -31,7 +39,11 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handler = (e) => { if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setDropdownOpen(false); };
+    const handler = (e) => { 
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setDropdownOpen(false);
+      if (themeRef.current && !themeRef.current.contains(e.target)) setThemeDropdown(false);
+      if (langRef.current && !langRef.current.contains(e.target)) setLangDropdown(false);
+    };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
@@ -59,7 +71,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', flexShrink: 0, marginRight: 'auto' }}>
           <Image src="/images/logo.png" alt="Engineering Tutorials Logo" width={36} height={36} style={{ objectFit: 'contain' }} />
-          <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#111827', fontFamily: 'IBM Plex Sans, sans-serif' }} className="logo-text">
+          <span style={{ fontWeight: 700, fontSize: '1.1rem', color: 'var(--text-primary)', fontFamily: 'IBM Plex Sans, sans-serif' }} className="logo-text">
             Engineering<span style={{ color: '#16a34a' }}>&</span>Me
           </span>
         </Link>
@@ -95,10 +107,59 @@ export default function Navbar() {
           )}
         </div>
 
+        {/* Theme Toggle */}
+        <div ref={themeRef} style={{ position: 'relative' }}>
+          <button 
+            onClick={() => setThemeDropdown(!themeDropdown)} 
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem', borderRadius: 6, display: 'flex', alignItems: 'center', transition: 'background 0.15s' }}
+            title="Theme"
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'none'}
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          {themeDropdown && (
+            <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 150, zIndex: 50 }}>
+              <button onClick={() => { setTheme('light'); setThemeDropdown(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: theme === 'light' ? '#16a34a' : 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
+                <Sun size={16} /> Light
+              </button>
+              <button onClick={() => { setTheme('dark'); setThemeDropdown(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: theme === 'dark' ? '#16a34a' : 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', borderTop: '1px solid var(--bg-secondary)' }}>
+                <Moon size={16} /> Dark
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Language Toggle */}
+        <div ref={langRef} style={{ position: 'relative' }}>
+          <button 
+            onClick={() => setLangDropdown(!langDropdown)} 
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem', borderRadius: 6, display: 'flex', alignItems: 'center', transition: 'background 0.15s' }}
+            title="Language"
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'none'}
+          >
+            <Globe size={20} />
+          </button>
+          {langDropdown && (
+            <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 140, zIndex: 50 }}>
+              {supportedLanguages.map((lang, idx) => (
+                <button 
+                  key={lang.code}
+                  onClick={() => { setLanguage(lang.code); setLangDropdown(false); }} 
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: language === lang.code ? '#16a34a' : 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', borderTop: idx > 0 ? '1px solid var(--bg-secondary)' : 'none' }}
+                >
+                  {lang.name}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Auth */}
         {user ? (
           <div ref={dropdownRef} style={{ position: 'relative' }} className="auth-container">
-            <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: '1.5px solid #e5e7eb', borderRadius: 8, padding: '0.3rem 0.6rem', cursor: 'pointer', transition: 'border-color 0.15s' }}>
+            <button onClick={() => setDropdownOpen(!dropdownOpen)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: '1.5px solid var(--border)', borderRadius: 8, padding: '0.3rem 0.6rem', cursor: 'pointer', transition: 'border-color 0.15s' }}>
               <Image src={avatarUrl} alt={user.name} width={28} height={28} style={{ borderRadius: '50%', objectFit: 'cover' }} unoptimized />
               <span style={{ fontSize: '0.875rem', fontWeight: 500, color: '#374151', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} className="user-name">
                 {user.name?.split(' ')[0]}
@@ -112,10 +173,10 @@ export default function Navbar() {
             </button>
 
             {dropdownOpen && (
-              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'white', border: '1px solid #e5e7eb', borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: 200, zIndex: 100, overflow: 'hidden' }}>
-                <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid #f3f4f6' }}>
-                  <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: 0 }}>{user.name}</p>
-                  <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: '2px 0 0', textTransform: 'capitalize' }}>{user.role}</p>
+              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,0.12)', minWidth: 200, zIndex: 100, overflow: 'hidden' }}>
+                <div style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--bg-secondary)' }}>
+                  <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>{user.name}</p>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '2px 0 0', textTransform: 'capitalize' }}>{user.role}</p>
                 </div>
                 {[
                   { href: '/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={15} /> },
@@ -123,12 +184,12 @@ export default function Navbar() {
                   ...(user.role === 'admin' ? [{ href: '/admin/dashboard', label: 'Admin Panel', icon: <Settings size={15} /> }] : []),
                   ...(user.role === 'author' ? [{ href: '/admin/tutorials', label: 'My Tutorials', icon: <BookOpen size={15} /> }] : []),
                 ].map(item => (
-                  <Link key={item.href} href={item.href} onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: '#374151', textDecoration: 'none', transition: 'background 0.1s' }}
-                    onMouseEnter={e => e.currentTarget.style.background = '#f9fafb'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                    <span style={{ color: '#9ca3af' }}>{item.icon}</span>{item.label}
+                  <Link key={item.href} href={item.href} onClick={() => setDropdownOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', textDecoration: 'none', transition: 'background 0.1s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                    <span style={{ color: 'var(--text-muted)' }}>{item.icon}</span>{item.label}
                   </Link>
                 ))}
-                <div style={{ borderTop: '1px solid #f3f4f6' }}>
+                <div style={{ borderTop: '1px solid var(--bg-secondary)' }}>
                   <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
                     <LogOut size={15} /> Sign Out
                   </button>
@@ -138,22 +199,22 @@ export default function Navbar() {
           </div>
         ) : (
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }} className="auth-buttons">
-            <Link href="/login" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#374151', textDecoration: 'none', borderRadius: 6, border: '1.5px solid #e5e7eb', transition: 'border-color 0.15s' }}>Login</Link>
+            <Link href="/login" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: 6, border: '1.5px solid var(--border)', transition: 'border-color 0.15s' }}>Login</Link>
             <Link href="/signup" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 600, color: 'white', background: '#16a34a', borderRadius: 6, textDecoration: 'none', transition: 'background 0.15s' }}>Sign Up</Link>
           </div>
         )}
 
         {/* Mobile menu toggle */}
-        <button onClick={() => setMobileOpen(!mobileOpen)} style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', color: '#374151', padding: '0.3rem' }} className="show-mobile">
+        <button onClick={() => setMobileOpen(!mobileOpen)} style={{ display: 'none', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.3rem' }} className="show-mobile">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div style={{ background: 'white', borderTop: '1px solid #e5e7eb', padding: '1rem 1.25rem', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
+        <div style={{ background: 'var(--bg-primary)', borderTop: '1px solid var(--border)', padding: '1rem 1.25rem', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
           {NAV_LINKS.map(link => (
-            <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} style={{ display: 'block', padding: '0.6rem 0', fontSize: '0.95rem', fontWeight: 500, color: pathname === link.href ? '#16a34a' : '#374151', textDecoration: 'none', borderBottom: '1px solid #f3f4f6' }}>
+            <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} style={{ display: 'block', padding: '0.6rem 0', fontSize: '0.95rem', fontWeight: 500, color: pathname === link.href ? '#16a34a' : 'var(--text-secondary)', textDecoration: 'none', borderBottom: '1px solid var(--bg-secondary)' }}>
               {link.label}
             </Link>
           ))}
