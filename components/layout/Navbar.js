@@ -257,7 +257,7 @@ export default function Navbar() {
           .search-container { display: none !important; }
           .search-button { display: none !important; }
           .auth-container { display: flex !important; }
-          .auth-buttons { display: flex !important; }
+          .auth-buttons { display: none !important; }
           .user-name { display: none !important; }
           .streak-badge { display: none !important; }
           .logo-text { font-size: 0.9rem; }
