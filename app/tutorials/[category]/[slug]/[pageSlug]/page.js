@@ -8,7 +8,7 @@ import PageNavigation from '@/components/tutorial/PageNavigation';
 import QuizSection from '@/components/tutorial/QuizSection';
 import TutorialPageClient from '@/components/tutorial/TutorialPageClient';
 //import AdUnit from '@/components/ui/AdUnit';
-import AdsterraNative from '@components/ui/AdsterraNative';
+import AdsterraNative from '@/components/ui/AdsterraNative';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';

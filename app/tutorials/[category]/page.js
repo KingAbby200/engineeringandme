@@ -3,7 +3,7 @@ import { Tutorial } from '@/lib/models/Tutorial';
 import Category from '@/lib/models/Category';
 import TutorialCard from '@/components/tutorial/TutorialCard';
 //import AdUnit from '@/components/ui/AdUnit';
-import AdsterraNative from '@components/ui/AdsterraNative';
+import AdsterraNative from '@/components/ui/AdsterraNative';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BookOpen, Filter } from 'lucide-react';
