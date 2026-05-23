@@ -8,8 +8,8 @@ import ThemeProvider from '@/components/providers/ThemeProvider';
 import Script from 'next/script';
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://engineeringtutorials.com'),
-  title: { default: 'Engineering Tutorials – Learn Engineering Online', template: '%s | Engineering Tutorials' },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://engineeringandme.com' || 'https://engineeringandme.vercel.app'),
+  title: { default: 'Engineering & Me. Learn Engineering Online', template: '%s | Engineering & Me' },
   description: 'Free, comprehensive engineering tutorials across Electrical, Civil, Mechanical, Computer, Chemical Engineering and more. Learn at your own pace with structured lessons.',
   keywords: ['engineering tutorials', 'electrical engineering', 'civil engineering', 'mechanical engineering', 'computer engineering', 'chemical engineering', 'engineering learning', 'free engineering courses'],
   authors: [{ name: 'Engineering Tutorials' }],
@@ -24,12 +24,12 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    siteName: 'Engineering Tutorials',
+    siteName: 'Engineering & Me',
     title: 'Engineering & Me. Learn Engineering Online',
     description: 'Free, comprehensive engineering tutorials for all disciplines. Structured learning with quizzes and progress tracking.',
-    images: [{ url: '/images/logo.png', width: 1200, height: 630, alt: 'Engineering Tutorials' }],
+    images: [{ url: '/logo.png', width: 1200, height: 630, alt: 'Engineering Tutorials' }],
   },
-  twitter: { card: 'summary_large_image', title: 'Engineering & Me', description: 'Free engineering tutorials for all disciplines.', images: ['/images/logo.png'], creator: '@EngineeringandMe' },
+  twitter: { card: 'summary_large_image', title: 'Engineering & Me', description: 'Free engineering tutorials for all disciplines.', images: ['/logo.png'], creator: '@EngineeringandMe' },
   verification: { google: 'your-google-verification-code' },
 };
 
