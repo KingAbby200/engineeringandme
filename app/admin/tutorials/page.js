@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useAuthStore } from '@/lib/store/authStore';
 import { Star, Trash2, Edit, Loader, PlusCircle, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -12,6 +13,7 @@ const STATUS_STYLES = {
 };
 
 export default function AdminTutorialsPage() {
+  const { user, fetchUser } = useAuthStore();
   const [tutorials, setTutorials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -20,11 +22,14 @@ export default function AdminTutorialsPage() {
 
   const load = () => {
     setLoading(true);
-    const qs = new URLSearchParams({ limit: '100', ...(statusFilter ? { status: statusFilter } : { status: 'all' }) }).toString();
+    const params = { limit: '100', ...(statusFilter ? { status: statusFilter } : { status: 'all' }) };
+    if (user?.role === 'author') params.author = user._id;
+    const qs = new URLSearchParams(params).toString();
     fetch(`/api/tutorials?${qs}`).then(r => r.json()).then(d => { setTutorials(d.tutorials || []); setLoading(false); });
   };
 
-  useEffect(() => { load(); }, [statusFilter]);
+  useEffect(() => { fetchUser(); }, [fetchUser]);
+  useEffect(() => { if (user) load(); }, [user, statusFilter]);
 
   const handleDelete = async (id, title) => {
     if (!confirm(`Delete "${title}"? This will also delete all its pages.`)) return;
@@ -57,7 +62,7 @@ export default function AdminTutorialsPage() {
     <div style={{ padding: '2rem 1.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.2rem' }}>All Tutorials</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.2rem' }}>{user?.role === 'author' ? 'My Tutorials' : 'All Tutorials'}</h1>
           <p style={{ color: '#64748b', margin: 0, fontSize: '0.875rem' }}>{filtered.length} tutorials</p>
         </div>
         <Link href="/admin/tutorials/new" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.6rem 1.1rem', background: '#16a34a', color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>

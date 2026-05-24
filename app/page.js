@@ -11,15 +11,31 @@ import CategoryCard from '@/components/ui/CategoryCard';
 import { BookOpen, Zap, Trophy, Users, ArrowRight, CheckCircle } from 'lucide-react';
 
 async function getData() {
+  function normalize(obj) {
+    if (!obj) return obj;
+    const data = { ...obj };
+    if (data._id?.toString) data._id = data._id.toString();
+    if (data.category) data.category = normalize(data.category);
+    if (data.author) data.author = normalize(data.author);
+    return data;
+  }
+
   try {
     await connectDB();
     const [categories, featured, recent] = await Promise.all([
-      Category.find({ isActive: true }).sort({ order: 1 }).limit(10),
-      Tutorial.find({ status: 'approved', featured: true }).populate('category', 'name slug').populate('author', 'name').limit(6),
-      Tutorial.find({ status: 'approved' }).populate('category', 'name slug').populate('author', 'name').sort({ createdAt: -1 }).limit(8),
+      Category.find({ isActive: true }).sort({ order: 1 }).limit(10).lean(),
+      Tutorial.find({ status: 'approved', featured: true }).populate('category', 'name slug').populate('author', 'name').limit(6).lean(),
+      Tutorial.find({ status: 'approved' }).populate('category', 'name slug').populate('author', 'name').sort({ createdAt: -1 }).limit(8).lean(),
     ]);
-    return { categories, featured, recent };
-  } catch { return { categories: [], featured: [], recent: [] }; }
+
+    return {
+      categories: categories.map(normalize),
+      featured: featured.map(normalize),
+      recent: recent.map(normalize),
+    };
+  } catch {
+    return { categories: [], featured: [], recent: [] };
+  }
 }
 
 export default async function HomePage() {

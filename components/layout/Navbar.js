@@ -5,13 +5,13 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useThemeStore } from '@/lib/store/themeStore';
-import { useLanguageStore, supportedLanguages } from '@/lib/store/languageStore';
+import { useLanguageStore, supportedLanguages, getTranslation } from '@/lib/store/languageStore';
 import { Menu, X, Search, ChevronDown, BookOpen, User, LogOut, Settings, LayoutDashboard, Flame, Moon, Sun, Globe } from 'lucide-react';
 
 const NAV_LINKS = [
-  { href: '/', label: 'Home' },
-  { href: '/tutorials', label: 'Tutorials' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/', key: 'home' },
+  { href: '/tutorials', key: 'tutorials' },
+  { href: '/contact', key: 'contact' },
 ];
 
 export default function Navbar() {
@@ -20,16 +20,16 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
-  const [themeDropdown, setThemeDropdown] = useState(false);
   const [langDropdown, setLangDropdown] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { user, fetchUser, logout } = useAuthStore();
-  const { theme, setTheme } = useThemeStore();
-  const { language, setLanguage } = useLanguageStore();
+  const { theme, toggleTheme } = useThemeStore();
+  const language = useLanguageStore(state => state.language);
+  const setLanguage = useLanguageStore(state => state.setLanguage);
   const dropdownRef = useRef(null);
-  const themeRef = useRef(null);
   const langRef = useRef(null);
+  const t = (key) => getTranslation(language, key);
 
   useEffect(() => { fetchUser(); }, [fetchUser]);
   useEffect(() => {
@@ -41,7 +41,6 @@ export default function Navbar() {
   useEffect(() => {
     const handler = (e) => { 
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setDropdownOpen(false);
-      if (themeRef.current && !themeRef.current.contains(e.target)) setThemeDropdown(false);
       if (langRef.current && !langRef.current.contains(e.target)) setLangDropdown(false);
     };
     document.addEventListener('mousedown', handler);
@@ -66,7 +65,7 @@ export default function Navbar() {
   const avatarUrl = user?.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user?.name || 'U')}&backgroundColor=16a34a`;
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: scrolled ? 'rgba(255,255,255,0.97)' : 'white', borderBottom: '1px solid #e5e7eb', backdropFilter: 'blur(8px)', transition: 'box-shadow 0.2s', boxShadow: scrolled ? '0 2px 12px rgba(0,0,0,0.08)' : 'none' }}>
+    <header style={{ position: 'sticky', top: 0, zIndex: 50, background: scrolled ? 'color-mix(in srgb, var(--bg-primary) 97%, transparent)' : 'var(--bg-primary)', borderBottom: '1px solid var(--border)', backdropFilter: 'blur(8px)', transition: 'box-shadow 0.2s', boxShadow: scrolled ? '0 2px 12px rgba(0,0,0,0.08)' : 'none' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 1.25rem', display: 'flex', alignItems: 'center', height: '64px', gap: '1rem' }}>
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', flexShrink: 0, marginRight: 'auto' }}>
@@ -80,7 +79,7 @@ export default function Navbar() {
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginLeft: '1rem', flex: 1 }} className="hidden-mobile">
           {NAV_LINKS.map(link => (
             <Link key={link.href} href={link.href} style={{ padding: '0.4rem 0.75rem', borderRadius: 6, fontSize: '0.9rem', fontWeight: 500, textDecoration: 'none', color: pathname === link.href ? '#16a34a' : '#374151', background: pathname === link.href ? '#f0fdf4' : 'transparent', transition: 'all 0.15s' }}>
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
         </nav>
@@ -95,7 +94,7 @@ export default function Navbar() {
                 autoFocus
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search tutorials..."
+                placeholder={t('searchTutorials')}
                 style={{ padding: '0.4rem 0.75rem', border: '1.5px solid #16a34a', borderRadius: 6, fontSize: '0.875rem', outline: 'none', width: '220px', fontFamily: 'IBM Plex Sans, sans-serif' }}
               />
               <button type="button" onClick={() => setSearchOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280', padding: '0.25rem' }}><X size={18} /></button>
@@ -108,38 +107,27 @@ export default function Navbar() {
         </div>
 
         {/* Theme Toggle */}
-        <div ref={themeRef} style={{ position: 'relative' }}>
-          <button 
-            onClick={() => setThemeDropdown(!themeDropdown)} 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem', borderRadius: 6, display: 'flex', alignItems: 'center', transition: 'background 0.15s' }}
-            title="Theme"
-            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'none'}
-          >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-          {themeDropdown && (
-            <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 150, zIndex: 50 }}>
-              <button onClick={() => { setTheme('light'); setThemeDropdown(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: theme === 'light' ? '#16a34a' : 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
-                <Sun size={16} /> Light
-              </button>
-              <button onClick={() => { setTheme('dark'); setThemeDropdown(false); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: theme === 'dark' ? '#16a34a' : 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left', borderTop: '1px solid var(--bg-secondary)' }}>
-                <Moon size={16} /> Dark
-              </button>
-            </div>
-          )}
-        </div>
+        <button 
+          onClick={() => toggleTheme()} 
+          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem', borderRadius: 6, display: 'flex', alignItems: 'center', transition: 'background 0.15s' }}
+          title={t('theme')}
+          onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'none'}
+        >
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
 
         {/* Language Toggle */}
         <div ref={langRef} style={{ position: 'relative' }}>
           <button 
             onClick={() => setLangDropdown(!langDropdown)} 
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem', borderRadius: 6, display: 'flex', alignItems: 'center', transition: 'background 0.15s' }}
-            title="Language"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '0.4rem 0.6rem', borderRadius: 6, display: 'flex', alignItems: 'center', gap: '0.35rem', transition: 'background 0.15s', fontSize: '0.9rem', fontWeight: 500 }}
+            title={t('language')}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
             onMouseLeave={e => e.currentTarget.style.background = 'none'}
           >
-            <Globe size={20} />
+            <Globe size={18} />
+            {language.toUpperCase()}
           </button>
           {langDropdown && (
             <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', background: 'var(--bg-primary)', border: '1px solid var(--border)', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', minWidth: 140, zIndex: 50 }}>
@@ -199,8 +187,8 @@ export default function Navbar() {
           </div>
         ) : (
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }} className="auth-buttons">
-            <Link href="/login" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: 6, border: '1.5px solid var(--border)', transition: 'border-color 0.15s' }}>Login</Link>
-            <Link href="/signup" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 600, color: 'white', background: '#16a34a', borderRadius: 6, textDecoration: 'none', transition: 'background 0.15s' }}>Sign Up</Link>
+            <Link href="/login" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-secondary)', textDecoration: 'none', borderRadius: 6, border: '1.5px solid var(--border)', transition: 'border-color 0.15s' }}>{t('login')}</Link>
+            <Link href="/signup" style={{ padding: '0.4rem 1rem', fontSize: '0.875rem', fontWeight: 600, color: 'white', background: '#16a34a', borderRadius: 6, textDecoration: 'none', transition: 'background 0.15s' }}>{t('signup')}</Link>
           </div>
         )}
 
@@ -215,7 +203,7 @@ export default function Navbar() {
         <div style={{ background: 'var(--bg-primary)', borderTop: '1px solid var(--border)', padding: '1rem 1.25rem', maxHeight: 'calc(100vh - 64px)', overflowY: 'auto' }}>
           {NAV_LINKS.map(link => (
             <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} style={{ display: 'block', padding: '0.6rem 0', fontSize: '0.95rem', fontWeight: 500, color: pathname === link.href ? '#16a34a' : 'var(--text-secondary)', textDecoration: 'none', borderBottom: '1px solid var(--bg-secondary)' }}>
-              {link.label}
+              {t(link.key)}
             </Link>
           ))}
           <form onSubmit={handleSearch} style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>

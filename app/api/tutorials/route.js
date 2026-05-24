@@ -6,6 +6,7 @@ import { getAuthUser, apiError, apiResponse, slugify } from '@/lib/utils/auth';
 
 export async function GET(request) {
   try {
+    const authUser = await getAuthUser(request);
     await connectDB();
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
@@ -22,6 +23,16 @@ export async function GET(request) {
     if (featured) query.featured = featured === 'true';
     if (author) query.author = author;
     if (search) query.$text = { $search: search };
+
+    const adminAndAuthorOnlyStatuses = ['all', 'pending', 'draft', 'rejected'];
+    if (adminAndAuthorOnlyStatuses.includes(status) || author) {
+      if (!authUser || !['admin', 'author'].includes(authUser.role)) {
+        return apiError('Unauthorized', 403);
+      }
+      if (authUser.role === 'author') {
+        query.author = authUser.id;
+      }
+    }
 
     const skip = (page - 1) * limit;
     const [tutorials, total] = await Promise.all([

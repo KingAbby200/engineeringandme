@@ -44,27 +44,46 @@ export default async function TutorialPageView({ params }) {
 
   const tutorial = await Tutorial.findOne({ slug, status: 'approved' })
     .populate('category', 'name slug icon color')
-    .populate('author', 'name avatar bio');
+    .populate('author', 'name avatar bio')
+    .lean();
 
   if (!tutorial) notFound();
 
-  const pages = await TutorialPage.find({ tutorial: tutorial._id }).sort({ order: 1 });
+  const pages = await TutorialPage.find({ tutorial: tutorial._id }).sort({ order: 1 }).lean();
   if (!pages || pages.length === 0) notFound();
-  
-  const currentPage = pages.find(p => p.slug === pageSlug);
+
+  const tutorialData = {
+    ...tutorial,
+    _id: tutorial._id.toString(),
+    category: tutorial.category ? { ...tutorial.category, _id: tutorial.category._id.toString() } : null,
+    author: tutorial.author ? { ...tutorial.author, _id: tutorial.author._id?.toString() } : null,
+  };
+
+  const pagesData = pages.map(p => ({
+    ...p,
+    _id: p._id.toString(),
+    quiz: p.quiz ? {
+      ...p.quiz,
+      questions: Array.isArray(p.quiz.questions)
+        ? p.quiz.questions.map(q => ({ ...q, _id: q._id?.toString() }))
+        : [],
+    } : null,
+  }));
+
+  const currentPage = pagesData.find(p => p.slug === pageSlug);
   if (!currentPage) {
-    console.warn(`Page slug not found: ${pageSlug}. Available slugs: ${pages.map(p => p.slug).join(', ')}`);
+    console.warn(`Page slug not found: ${pageSlug}. Available slugs: ${pagesData.map(p => p.slug).join(', ')}`);
     notFound();
   }
-  
+
   if (!currentPage.content || currentPage.content.trim() === '') {
     console.error(`Page has empty content: tutorial=${tutorial.slug}, page=${pageSlug}`);
     notFound();
   }
 
-  const currentIndex = pages.findIndex(p => p.slug === pageSlug);
-  const prevPage = pages[currentIndex - 1] || null;
-  const nextPage = pages[currentIndex + 1] || null;
+  const currentIndex = pagesData.findIndex(p => p.slug === pageSlug);
+  const prevPage = pagesData[currentIndex - 1] || null;
+  const nextPage = pagesData[currentIndex + 1] || null;
 
   // Get user progress
   let userProgress = null;
@@ -76,6 +95,7 @@ export default async function TutorialPageView({ params }) {
       if (authUser) {
         const user = await User.findById(authUser.id).select('progress');
         userProgress = user?.progress?.find(p => p.tutorial?.toString() === tutorial._id.toString());
+        if (userProgress) userProgress = JSON.parse(JSON.stringify(userProgress));
       }
     }
   } catch {}
@@ -86,9 +106,9 @@ export default async function TutorialPageView({ params }) {
     <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
       {/* Sidebar */}
       <TutorialSidebar
-        tutorial={{ ...tutorial.toObject(), _id: tutorial._id.toString() }}
-        pages={pages.map(p => ({ ...p.toObject(), _id: p._id.toString() }))}
-        currentPageId={currentPage._id.toString()}
+        tutorial={tutorialData}
+        pages={pagesData}
+        currentPageId={currentPage._id}
         userProgress={userProgress}
         categorySlug={category}
       />
@@ -97,8 +117,8 @@ export default async function TutorialPageView({ params }) {
       <div style={{ flex: 1, minWidth: 0, maxWidth: '100%' }}>
         {/* Progress tracker + page header */}
         <TutorialPageClient
-          tutorialId={tutorial._id.toString()}
-          pageId={currentPage._id.toString()}
+          tutorialId={tutorialData._id}
+          pageId={currentPage._id}
         />
 
         <article style={{ maxWidth: '860px', margin: '0 auto', padding: '2rem 1.25rem 4rem' }}>
@@ -106,9 +126,9 @@ export default async function TutorialPageView({ params }) {
           <nav style={{ marginBottom: '1.5rem', fontSize: '0.8rem', color: '#9ca3af', display: 'flex', gap: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
             <Link href="/" style={{ color: '#16a34a', textDecoration: 'none' }}>Home</Link>
             <ChevronRight size={12} />
-            <Link href={`/tutorials/${category}`} style={{ color: '#16a34a', textDecoration: 'none' }}>{tutorial.category?.name}</Link>
+            <Link href={`/tutorials/${category}`} style={{ color: '#16a34a', textDecoration: 'none' }}>{tutorialData.category?.name}</Link>
             <ChevronRight size={12} />
-            <Link href={`/tutorials/${category}/${slug}`} style={{ color: '#16a34a', textDecoration: 'none' }}>{tutorial.title}</Link>
+            <Link href={`/tutorials/${category}/${slug}`} style={{ color: '#16a34a', textDecoration: 'none' }}>{tutorialData.title}</Link>
             <ChevronRight size={12} />
             <span style={{ color: '#374151' }}>{currentPage.title}</span>
           </nav>
@@ -120,14 +140,14 @@ export default async function TutorialPageView({ params }) {
             </h1>
             <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.8rem', color: '#9ca3af', alignItems: 'center' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Clock size={13} /> {currentPage.readingTime || 5} min read</span>
-              {tutorial.author && (
+              {tutorialData.author && (
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  {tutorial.author.avatar && <Image src={tutorial.author.avatar} alt={tutorial.author.name} width={20} height={20} style={{ borderRadius: '50%', objectFit: 'cover' }} />}
-                  <UserIcon size={13} /> {tutorial.author.name}
+                  {tutorialData.author.avatar && <Image src={tutorialData.author.avatar} alt={tutorialData.author.name} width={20} height={20} style={{ borderRadius: '50%', objectFit: 'cover' }} />}
+                  <UserIcon size={13} /> {tutorialData.author.name}
                 </span>
               )}
               <span style={{ background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: 4, padding: '0.1rem 0.5rem', fontSize: '0.75rem', fontWeight: 600 }}>
-                Page {currentIndex + 1} of {pages.length}
+                Page {currentIndex + 1} of {pagesData.length}
               </span>
             </div>
           </header>
@@ -151,7 +171,7 @@ export default async function TutorialPageView({ params }) {
           </div>
 
           {/* Quiz */}
-          <QuizSection quiz={currentPage.quiz} pageId={currentPage._id.toString()} />
+          <QuizSection quiz={currentPage.quiz} pageId={currentPage._id} />
 
           {/* Page navigation */}
           <PageNavigation pageUrl={pageUrl} prevPage={prevPage} nextPage={nextPage} category={category} />
@@ -162,9 +182,9 @@ export default async function TutorialPageView({ params }) {
             '@type': 'Article',
             headline: currentPage.title,
             description: currentPage.metaDescription,
-            author: { '@type': 'Person', name: tutorial.author?.name },
+            author: { '@type': 'Person', name: tutorialData.author?.name },
             publisher: { '@type': 'Organization', name: 'Engineering Tutorials' },
-            isPartOf: { '@type': 'Course', name: tutorial.title },
+            isPartOf: { '@type': 'Course', name: tutorialData.title },
           }) }} />
         </article>
       </div>

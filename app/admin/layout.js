@@ -26,9 +26,15 @@ export default function AdminLayout({ children }) {
   }, []);
 
   useEffect(() => {
-    if (!checking && user && user.role !== 'admin') router.push('/dashboard');
+    if (!checking && user && !['admin', 'author'].includes(user.role)) router.push('/dashboard');
     if (!checking && !user) router.push('/login');
   }, [checking, user]);
+
+  useEffect(() => {
+    if (!checking && user && user.role === 'author' && pathname.startsWith('/admin/') && !pathname.startsWith('/admin/tutorials')) {
+      router.push('/admin/tutorials');
+    }
+  }, [checking, user, pathname]);
 
   if (checking || !user) {
     return (
@@ -42,12 +48,19 @@ export default function AdminLayout({ children }) {
     );
   }
 
-  if (user.role !== 'admin') return null;
+  if (user.role !== 'admin' && user.role !== 'author') return null;
+
+  const navItems = user.role === 'admin'
+    ? NAV
+    : [{ href: '/admin/tutorials', label: 'My Tutorials', icon: <BookOpen size={17} /> }];
 
   const Sidebar = () => (
     <div style={{ width: 240, background: '#0f172a', color: '#cbd5e1', height: '100%', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
       <div style={{ padding: '1.25rem 1rem', borderBottom: '1px solid #1e293b' }}>
-        <p style={{ margin: 0, fontWeight: 700, color: 'white', fontSize: '0.95rem' }}>⚙️ Admin Panel</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <LayoutDashboard size={18} color="white" />
+          <p style={{ margin: 0, fontWeight: 700, color: 'white', fontSize: '0.95rem' }}>Admin Panel</p>
+        </div>
         <p style={{ margin: '0.2rem 0 0', fontSize: '0.75rem', color: '#64748b' }}>{user.email}</p>
       </div>
       <nav style={{ flex: 1, padding: '0.75rem 0', overflowY: 'auto' }}>

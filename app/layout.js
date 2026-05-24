@@ -7,7 +7,7 @@ import CookieBanner from '@/components/ui/CookieBanner';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import Script from 'next/script';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://engineeringandme.vercel.app';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://engineeringandme.com';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -29,7 +29,7 @@ export const metadata = {
     siteName: 'Engineering & Me',
     title: 'Engineering & Me. Learn Engineering Online',
     description: 'Free, comprehensive engineering tutorials for all disciplines. Structured learning with quizzes and progress tracking.',
-    images: [{ url: `${SITE_URL}/images/logo.png`, width: 1200, height: 630, alt: 'Engineering Tutorials' }],
+    images: [{ url: `${SITE_URL}/images/logo.png`, width: 1200, height: 630, alt: 'Engineering Tutorials', type: 'image/png' }],
   },
   twitter: { card: 'summary_large_image', title: 'Engineering & Me', description: 'Free engineering tutorials for all disciplines.', images: [`${SITE_URL}/images/logo.png`], creator: '@EngineeringandMe' },
   verification: { google: 'your-google-verification-code' },
@@ -52,11 +52,14 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="canonical" href={SITE_URL} />
+        <link rel="image_src" href={`${SITE_URL}/images/logo.png`} />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Engineering & Me. Learn Engineering Online" />
         <meta property="og:description" content="Free, comprehensive engineering tutorials for all disciplines. Structured learning with quizzes and progress tracking." />
         <meta property="og:url" content={SITE_URL} />
         <meta property="og:image" content={`${SITE_URL}/images/logo.png`} />
+        <meta property="og:image:secure_url" content={`${SITE_URL}/images/logo.png`} />
+        <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Engineering Tutorials" />
