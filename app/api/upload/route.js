@@ -27,5 +27,3 @@ export async function POST(request) {
     return apiError('Upload failed: ' + err.message, 500);
   }
 }
-
-export const config = { api: { bodyParser: false } };

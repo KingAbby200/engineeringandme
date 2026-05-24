@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useLanguageStore, getTranslation } from '@/lib/store/languageStore';
 import { Mail, Globe, Rss, GitBranch } from 'lucide-react';
 import NewsletterForm from '@/components/ui/NewsletterForm';
 
@@ -28,6 +29,9 @@ const FOOTER_LINKS = {
 };
 
 export default function Footer() {
+  const language = useLanguageStore(state => state.language);
+  const t = (key) => getTranslation(language, key);
+
   return (
     <footer style={{ background: 'var(--footer-bg, #0f172a)', color: 'var(--footer-text, #cbd5e1)', marginTop: 'auto' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '3rem 1.25rem 1.5rem' }}>
@@ -78,8 +82,8 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h4 style={{ color: 'var(--footer-heading, white)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Newsletter</h4>
-            <p style={{ fontSize: '0.8rem', color: 'var(--footer-link-text, #94a3b8)', marginBottom: '1rem', lineHeight: 1.6 }}>Get the latest tutorials delivered to your inbox.</p>
+            <h4 style={{ color: 'var(--footer-heading, white)', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{t('newsletter')}</h4>
+            <p style={{ fontSize: '0.8rem', color: 'var(--footer-link-text, #94a3b8)', marginBottom: '1rem', lineHeight: 1.6 }}>{t('footerNewsletter')}</p>
             <NewsletterForm compact dark />
           </div>
         </div>

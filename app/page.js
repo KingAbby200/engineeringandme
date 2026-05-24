@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { cookies } from 'next/headers';
 import { connectDB } from '@/lib/mongodb';
 import { Tutorial } from '@/lib/models/Tutorial';
 import Category from '@/lib/models/Category';
@@ -8,7 +8,8 @@ import NewsletterForm from '@/components/ui/NewsletterForm';
 //import AdUnit from '@/components/ui/AdUnit';
 import AdsterraNative from '@/components/ui/AdsterraNative';
 import CategoryCard from '@/components/ui/CategoryCard';
-import { BookOpen, Zap, Trophy, Users, ArrowRight, CheckCircle, ClipboardList, BarChart3, Clock, Globe, Sparkles } from 'lucide-react';
+import { getTranslation } from '@/lib/store/languageStore';
+import { BookOpen, Zap, Trophy, ArrowRight, CheckCircle, ClipboardList, BarChart3, Clock, Globe, Sparkles } from 'lucide-react';
 
 async function getData() {
   function normalize(obj) {
@@ -40,7 +41,9 @@ async function getData() {
 
 export default async function HomePage() {
   const { categories, featured, recent } = await getData();
-
+  const cookieStore = await cookies();
+  const language = cookieStore.get('language')?.value || 'en';
+  const t = (key) => getTranslation(language, key);
   const allTutorials = featured.length >= 4 ? featured : recent;
 
   return (
@@ -50,25 +53,25 @@ export default async function HomePage() {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(22,163,74,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(34,197,94,0.1) 0%, transparent 40%)', pointerEvents: 'none' }} />
         <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(22,163,74,0.15)', border: '1px solid rgba(22,163,74,0.3)', borderRadius: 20, padding: '0.3rem 0.9rem', marginBottom: '1.5rem', fontSize: '0.8rem', color: '#4ade80' }}>
-            <Zap size={13} /> Free Engineering Education Platform
+            <Zap size={13} /> {t('heroBadge')}
           </div>
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 800, lineHeight: 1.15, margin: '0 0 1.25rem', fontFamily: 'IBM Plex Sans, sans-serif' }}>
-            Master Engineering Concepts<br />
-            <span style={{ color: '#22c55e' }}>One Tutorial at a Time</span>
+            {t('heroTitleLine1')}<br />
+            <span style={{ color: '#22c55e' }}>{t('heroTitleLine2')}</span>
           </h1>
           <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: '#94a3b8', maxWidth: 600, margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
-            Structured, in-depth tutorials across all engineering disciplines. From circuit theory to structural analysis. Learn at your own pace, track your progress, test your knowledge.
+            {t('heroSubtitle')}
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/tutorials" style={{ padding: '0.85rem 2rem', background: '#16a34a', color: 'white', borderRadius: 8, textDecoration: 'none', fontWeight: 700, fontSize: '1rem', transition: 'background 0.15s', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
-              Browse Tutorials <ArrowRight size={18} />
+              {t('browseTutorials')} <ArrowRight size={18} />
             </Link>
             <Link href="/signup" style={{ padding: '0.85rem 2rem', background: 'rgba(255,255,255,0.08)', color: 'white', border: '1.5px solid rgba(255,255,255,0.2)', borderRadius: 8, textDecoration: 'none', fontWeight: 600, fontSize: '1rem' }}>
-              Create Free Account
+              {t('createFreeAccount')}
             </Link>
           </div>
           <div style={{ display: 'flex', gap: '2.5rem', justifyContent: 'center', marginTop: '3rem', flexWrap: 'wrap' }}>
-            {[['Free Forever', CheckCircle], ['Quiz System', Trophy], ['Progress Tracking', BookOpen], ['All Disciplines', Zap]].map(([label, Icon]) => (
+            {[[t('featureFree'), CheckCircle], [t('featureQuiz'), Trophy], [t('featureProgress'), BookOpen], [t('featureDisciplines'), Zap]].map(([label, Icon]) => (
               <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#cbd5e1', fontSize: '0.875rem' }}>
                 <Icon size={16} color="#22c55e" /> {label}
               </div>
@@ -81,8 +84,8 @@ export default async function HomePage() {
       <section style={{ padding: '3.5rem 1.25rem', background: '#f9fafb' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem' }}>Engineering Disciplines</h2>
-            <p style={{ color: '#6b7280', margin: 0 }}>Choose your field and start learning today</p>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem' }}>{t('disciplinesHeading')}</h2>
+            <p style={{ color: '#6b7280', margin: 0 }}>{t('disciplinesSubheading')}</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
             {categories.map(cat => (
@@ -109,9 +112,9 @@ export default async function HomePage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.25rem' }}>
-                {featured.length ? 'Featured Tutorials' : 'Latest Tutorials'}
+                {featured.length ? t('featuredTutorials') : t('latestTutorials')}
               </h2>
-              <p style={{ color: '#6b7280', margin: 0 }}>Carefully curated engineering content</p>
+              <p style={{ color: '#6b7280', margin: 0 }}>{t('curatedContent')}</p>
             </div>
             <Link href="/tutorials" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#16a34a', textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem' }}>
               View all <ArrowRight size={16} />
@@ -124,8 +127,8 @@ export default async function HomePage() {
           ) : (
             <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#9ca3af', background: '#f9fafb', borderRadius: 12, border: '1.5px dashed #e5e7eb' }}>
               <BookOpen size={40} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
-              <p style={{ fontSize: '1rem', fontWeight: 500, margin: '0 0 0.5rem', color: '#6b7280' }}>No tutorials yet</p>
-              <p style={{ fontSize: '0.875rem', margin: 0 }}>Tutorials will appear here once published by authors.</p>
+              <p style={{ fontSize: '1rem', fontWeight: 500, margin: '0 0 0.5rem', color: '#6b7280' }}>{t('noTutorialsYet')}</p>
+              <p style={{ fontSize: '0.875rem', margin: 0 }}>{t('tutorialsWillAppear')}</p>
             </div>
           )}
         </div>
@@ -134,16 +137,16 @@ export default async function HomePage() {
       {/* Why section */}
       <section style={{ padding: '3.5rem 1.25rem', background: '#f9fafb', borderTop: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem', textAlign: 'center' }}>Why Engineering & Me?</h2>
-          <p style={{ color: '#6b7280', textAlign: 'center', margin: '0 0 2.5rem' }}>Built for serious engineering learners</p>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: '0 0 0.5rem', textAlign: 'center' }}>{t('whyHeading')}</h2>
+          <p style={{ color: '#6b7280', textAlign: 'center', margin: '0 0 2.5rem' }}>{t('whySubtitle')}</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
-              { icon: <BookOpen size={24} color="#16a34a" />, title: 'Structured Learning', desc: 'Organized tutorials with clear progression from basic to advanced concepts.' },
-              { icon: <ClipboardList size={24} color="#16a34a" />, title: 'Knowledge Quizzes', desc: 'Test your understanding at the end of each tutorial page with interactive quizzes.' },
-              { icon: <BarChart3 size={24} color="#16a34a" />, title: 'Progress Tracking', desc: 'Track your learning journey with detailed progress reports and completion stats.' },
-              { icon: <Clock size={24} color="#16a34a" />, title: 'Daily Streaks', desc: 'Build consistent habits with daily login streaks and learning momentum.' },
-              { icon: <Globe size={24} color="#16a34a" />, title: 'All Disciplines', desc: 'Coverage across Electrical, Civil, Mechanical, Chemical, Computer Engineering and more.' },
-              { icon: <Sparkles size={24} color="#16a34a" />, title: 'Completely Free', desc: 'All tutorials are free. No paywalls, no subscriptions, no hidden fees — ever.' },
+              { icon: <BookOpen size={24} color="#16a34a" />, title: t('structuredLearning'), desc: 'Organized tutorials with clear progression from basic to advanced concepts.' },
+              { icon: <ClipboardList size={24} color="#16a34a" />, title: t('knowledgeQuizzes'), desc: 'Test your understanding at the end of each tutorial page with interactive quizzes.' },
+              { icon: <BarChart3 size={24} color="#16a34a" />, title: t('progressTracking'), desc: 'Track your learning journey with detailed progress reports and completion stats.' },
+              { icon: <Clock size={24} color="#16a34a" />, title: t('dailyStreaks'), desc: 'Build consistent habits with daily login streaks and learning momentum.' },
+              { icon: <Globe size={24} color="#16a34a" />, title: t('allDisciplines'), desc: 'Coverage across Electrical, Civil, Mechanical, Chemical, Computer Engineering and more.' },
+              { icon: <Sparkles size={24} color="#16a34a" />, title: t('completelyFree'), desc: 'All tutorials are free. No paywalls, no subscriptions, no hidden fees — ever.' },
             ].map(item => (
               <div key={item.title} style={{ padding: '1.5rem', background: 'white', borderRadius: 10, border: '1.5px solid #e5e7eb' }}>
                 <div style={{ marginBottom: '0.75rem' }}>{item.icon}</div>
@@ -158,9 +161,9 @@ export default async function HomePage() {
       {/* Newsletter */}
       <section style={{ padding: '4rem 1.25rem', background: 'linear-gradient(135deg, #0f172a, #1e3a2f)', color: 'white' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, margin: '0 0 0.75rem' }}>Stay Updated</h2>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 700, margin: '0 0 0.75rem' }}>{t('stayUpdated')}</h2>
           <p style={{ color: '#94a3b8', margin: '0 0 2rem', lineHeight: 1.7 }}>
-            Get the latest engineering tutorials, tips, and resources delivered to your inbox. Join thousands of engineers learning every week.
+            {t('getLatest')}
           </p>
           <NewsletterForm dark />
         </div>

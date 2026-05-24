@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import {
   Bold, Italic, Underline as UnderlineIcon, Strikethrough, Code, Link2, Image as ImageIcon,
   AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Quote, Minus, Undo, Redo,
-  Heading1, Heading2, Heading3, FileCode, Highlighter, Type, Palette
+  Heading1, Heading2, Heading3, FileCode, Highlighter, Type, Palette, Globe, X
 } from 'lucide-react';
 
 const ToolbarButton = ({ onClick, active, title, children, disabled }) => (
@@ -65,6 +65,16 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const fileInputRef = useRef(null);
+  const [showTranslationPanel, setShowTranslationPanel] = useState(false);
+  const [translationHints, setTranslationHints] = useState({});
+  const [currentLanguage, setCurrentLanguage] = useState('es');
+  const [hintText, setHintText] = useState('');
+
+  const languages = [
+    { code: 'es', name: 'Spanish - Español' },
+    { code: 'fr', name: 'French - Français' },
+    { code: 'de', name: 'German - Deutsch' },
+  ];
 
   const editor = useEditor({
     extensions: [
@@ -170,6 +180,26 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
     }
   };
 
+  const addTranslationHint = () => {
+    if (!hintText.trim()) {
+      toast.error('Translation hint cannot be empty');
+      return;
+    }
+    setTranslationHints(prev => ({
+      ...prev,
+      [currentLanguage]: [...(prev[currentLanguage] || []), hintText]
+    }));
+    setHintText('');
+    toast.success(`Translation hint added for ${languages.find(l => l.code === currentLanguage)?.name}`);
+  };
+
+  const removeTranslationHint = (lang, index) => {
+    setTranslationHints(prev => ({
+      ...prev,
+      [lang]: prev[lang].filter((_, i) => i !== index)
+    }));
+  };
+
   if (!editor) return null;
 
   const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px', '36px', '48px'];
@@ -255,6 +285,10 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
         <ToolbarButton onClick={insertMath} title="Insert math expression">
           <span style={{ fontSize: '0.7rem', fontWeight: 700, fontFamily: 'serif' }}>∑</span>
         </ToolbarButton>
+
+        {/* Translation hints */}
+        <Separator />
+        <ToolbarButton onClick={() => setShowTranslationPanel(!showTranslationPanel)} title="Add translation hints"><Globe size={15} /></ToolbarButton>
       </div>
 
       {/* Editor area */}
@@ -263,6 +297,84 @@ export default function RichTextEditor({ content, onChange, placeholder = 'Start
       {/* Hidden file input */}
       <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }}
         onChange={e => { const file = e.target.files?.[0]; if (file) uploadImage(file); e.target.value = ''; }} />
+
+      {/* Translation Hints Panel */}
+      {showTranslationPanel && (
+        <div style={{
+          marginTop: '1rem', padding: '1rem', border: '1px solid #d1d5db', borderRadius: 8,
+          background: '#f9fafb'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600, color: '#1f2937' }}>Translation Hints</h3>
+            <button type="button" onClick={() => setShowTranslationPanel(false)} 
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+              <X size={18} color="#6b7280" />
+            </button>
+          </div>
+
+          <p style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', color: '#6b7280' }}>
+            Add notes and tips to help translators understand context and nuance for each language.
+          </p>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.3rem', color: '#374151' }}>
+              Select Language
+            </label>
+            <select value={currentLanguage} onChange={e => setCurrentLanguage(e.target.value)}
+              style={{ width: '100%', padding: '0.4rem', border: '1px solid #e5e7eb', borderRadius: 4, fontSize: '0.9rem' }}>
+              {languages.map(lang => <option key={lang.code} value={lang.code}>{lang.name}</option>)}
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 500, marginBottom: '0.3rem', color: '#374151' }}>
+              Translation Hint
+            </label>
+            <textarea value={hintText} onChange={e => setHintText(e.target.value)}
+              placeholder="E.g., 'This section uses technical terms specific to electrical engineering. Maintain accuracy in translation.'"
+              style={{
+                width: '100%', minHeight: '60px', padding: '0.5rem', border: '1px solid #e5e7eb',
+                borderRadius: 4, fontSize: '0.9rem', fontFamily: 'inherit', resize: 'vertical'
+              }} />
+          </div>
+
+          <button type="button" onClick={addTranslationHint}
+            style={{
+              background: '#16a34a', color: 'white', border: 'none', borderRadius: 4,
+              padding: '0.5rem 1rem', fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer'
+            }}>
+            Add Hint
+          </button>
+
+          {Object.keys(translationHints).length > 0 && (
+            <div style={{ marginTop: '1.5rem' }}>
+              <h4 style={{ margin: '0 0 0.8rem 0', fontSize: '0.85rem', fontWeight: 600, color: '#1f2937' }}>
+                Saved Translation Hints
+              </h4>
+              {languages.map(lang => (
+                translationHints[lang.code]?.length > 0 && (
+                  <div key={lang.code} style={{ marginBottom: '1rem', padding: '0.8rem', background: 'white', borderRadius: 4, border: '1px solid #e5e7eb' }}>
+                    <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.8rem', fontWeight: 600, color: '#059669' }}>
+                      {lang.name}
+                    </p>
+                    <div style={{ fontSize: '0.85rem', color: '#374151' }}>
+                      {translationHints[lang.code].map((hint, i) => (
+                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.4rem', padding: '0.4rem', background: '#f3f4f6', borderRadius: 3 }}>
+                          <span>{hint}</span>
+                          <button type="button" onClick={() => removeTranslationHint(lang.code, i)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginLeft: '0.5rem' }}>
+                            <X size={14} color="#ef4444" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

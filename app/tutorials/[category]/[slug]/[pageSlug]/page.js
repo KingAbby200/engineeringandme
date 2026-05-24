@@ -1,6 +1,7 @@
 import { connectDB } from '@/lib/mongodb';
 import { Tutorial, TutorialPage } from '@/lib/models/Tutorial';
 import { cookies } from 'next/headers';
+import { getTranslation } from '@/lib/store/languageStore';
 import { verifyToken } from '@/lib/utils/auth';
 import User from '@/lib/models/User';
 import TutorialSidebar from '@/components/tutorial/TutorialSidebar';
@@ -102,6 +103,11 @@ export default async function TutorialPageView({ params }) {
 
   const pageUrl = `/tutorials/${category}/${slug}`;
 
+  // language for server-side rendered strings (read from cookie)
+  const cookieStore = await cookies();
+  const language = cookieStore.get('language')?.value || 'en';
+  const t = (k) => getTranslation(language, k);
+
   return (
     <div style={{ display: 'flex', minHeight: 'calc(100vh - 64px)' }}>
       {/* Sidebar */}
@@ -124,7 +130,7 @@ export default async function TutorialPageView({ params }) {
         <article style={{ maxWidth: '860px', margin: '0 auto', padding: '2rem 1.25rem 4rem' }}>
           {/* Breadcrumb */}
           <nav style={{ marginBottom: '1.5rem', fontSize: '0.8rem', color: '#9ca3af', display: 'flex', gap: '0.4rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <Link href="/" style={{ color: '#16a34a', textDecoration: 'none' }}>Home</Link>
+            <Link href="/" style={{ color: '#16a34a', textDecoration: 'none' }}>{t('home')}</Link>
             <ChevronRight size={12} />
             <Link href={`/tutorials/${category}`} style={{ color: '#16a34a', textDecoration: 'none' }}>{tutorialData.category?.name}</Link>
             <ChevronRight size={12} />
@@ -139,7 +145,7 @@ export default async function TutorialPageView({ params }) {
               {currentPage.title}
             </h1>
             <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.8rem', color: '#9ca3af', alignItems: 'center' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Clock size={13} /> {currentPage.readingTime || 5} min read</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}><Clock size={13} /> {currentPage.readingTime || 5} {t('minRead')}</span>
               {tutorialData.author && (
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                   {tutorialData.author.avatar && <Image src={tutorialData.author.avatar} alt={tutorialData.author.name} width={20} height={20} style={{ borderRadius: '50%', objectFit: 'cover' }} />}
@@ -147,7 +153,7 @@ export default async function TutorialPageView({ params }) {
                 </span>
               )}
               <span style={{ background: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: 4, padding: '0.1rem 0.5rem', fontSize: '0.75rem', fontWeight: 600 }}>
-                Page {currentIndex + 1} of {pagesData.length}
+                {t('page')} {currentIndex + 1} {t('of')} {pagesData.length}
               </span>
             </div>
           </header>

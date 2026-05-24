@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import { connectDB } from '@/lib/mongodb';
 import { Tutorial } from '@/lib/models/Tutorial';
 import Category from '@/lib/models/Category';
@@ -6,6 +7,7 @@ import TutorialCard from '@/components/tutorial/TutorialCard';
 import AdsterraNative from '@/components/ui/AdsterraNative';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getTranslation } from '@/lib/store/languageStore';
 import { BookOpen, Filter, Layers } from 'lucide-react';
 
 export async function generateMetadata({ params }) {
@@ -46,6 +48,8 @@ export default async function CategoryPage({ params, searchParams }) {
   const sp = await searchParams;
   const page = parseInt(sp?.page || '1');
   const difficulty = sp?.difficulty || '';
+  const language = cookies().get('language')?.value || 'en';
+  const t = (key) => getTranslation(language, key);
 
   const data = await getData(category, page, difficulty);
   if (!data) notFound();
@@ -55,12 +59,12 @@ export default async function CategoryPage({ params, searchParams }) {
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '2rem 1.25rem' }}>
       {/* Breadcrumb */}
-      <nav style={{ marginBottom: '1.5rem', fontSize: '0.875rem', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-        <Link href="/" style={{ color: '#16a34a', textDecoration: 'none' }}>Home</Link>
+      <nav style={{ marginBottom: '1.5rem', fontSize: '0.875rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <Link href="/" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{t('home')}</Link>
         <span>/</span>
-        <Link href="/tutorials" style={{ color: '#16a34a', textDecoration: 'none' }}>Tutorials</Link>
+        <Link href="/tutorials" style={{ color: 'var(--primary)', textDecoration: 'none' }}>{t('tutorials')}</Link>
         <span>/</span>
-        <span style={{ color: '#374151', fontWeight: 500 }}>{cat.name}</span>
+        <span style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{cat.name}</span>
       </nav>
 
       <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2rem', alignItems: 'start' }}>
@@ -87,7 +91,7 @@ export default async function CategoryPage({ params, searchParams }) {
               <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', margin: 0 }}>{cat.name}</h1>
             </div>
             {cat.description && <p style={{ color: '#6b7280', margin: '0 0 1rem', lineHeight: 1.7 }}>{cat.description}</p>}
-            <p style={{ color: '#9ca3af', fontSize: '0.875rem', margin: 0 }}>{total} tutorial{total !== 1 ? 's' : ''} available</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: 0 }}>{total} {t('tutorials')} {t('available')}</p>
           </div>
 
           {/* Filters */}
@@ -95,8 +99,8 @@ export default async function CategoryPage({ params, searchParams }) {
             <Filter size={16} color="#9ca3af" />
             {['', 'beginner', 'intermediate', 'advanced'].map(d => (
               <Link key={d} href={`/tutorials/${category}${d ? `?difficulty=${d}` : ''}`}
-                style={{ padding: '0.3rem 0.85rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none', background: difficulty === d ? '#16a34a' : 'white', color: difficulty === d ? 'white' : '#6b7280', border: `1.5px solid ${difficulty === d ? '#16a34a' : '#e5e7eb'}`, textTransform: 'capitalize', transition: 'all 0.15s' }}>
-                {d || 'All Levels'}
+                style={{ padding: '0.3rem 0.85rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none', background: difficulty === d ? 'var(--primary)' : 'var(--bg-primary)', color: difficulty === d ? 'white' : 'var(--text-secondary)', border: `1.5px solid ${difficulty === d ? 'var(--primary)' : 'var(--border)'}`, textTransform: 'capitalize', transition: 'all 0.15s' }}>
+                {d || t('allLevels')}
               </Link>
             ))}
           </div>
@@ -124,7 +128,7 @@ export default async function CategoryPage({ params, searchParams }) {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '2.5rem', flexWrap: 'wrap' }}>
               {page > 1 && (
                 <Link href={`/tutorials/${category}?page=${page - 1}${difficulty ? `&difficulty=${difficulty}` : ''}`}
-                  style={{ padding: '0.5rem 1rem', border: '1.5px solid #e5e7eb', borderRadius: 6, textDecoration: 'none', color: '#374151', fontSize: '0.875rem', fontWeight: 500 }}>← Prev</Link>
+                  style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-primary)', fontSize: '0.875rem', fontWeight: 500 }}>{t('prev')}</Link>
               )}
               {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
                 let p;
@@ -141,7 +145,7 @@ export default async function CategoryPage({ params, searchParams }) {
               })}
               {page < totalPages && (
                 <Link href={`/tutorials/${category}?page=${page + 1}${difficulty ? `&difficulty=${difficulty}` : ''}`}
-                  style={{ padding: '0.5rem 1rem', border: '1.5px solid #e5e7eb', borderRadius: 6, textDecoration: 'none', color: '#374151', fontSize: '0.875rem', fontWeight: 500 }}>Next →</Link>
+                  style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-primary)', fontSize: '0.875rem', fontWeight: 500 }}>{t('next')}</Link>
               )}
             </div>
           )}

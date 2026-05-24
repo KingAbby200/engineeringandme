@@ -1,4 +1,4 @@
-use client';
+'use client';
 import { useState } from 'react';
 import { Save, Loader, Shield, Bell, Globe, Database, Settings, AlertTriangle, BookOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
