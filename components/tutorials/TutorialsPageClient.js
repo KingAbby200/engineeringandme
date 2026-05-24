@@ -24,13 +24,13 @@ export default function TutorialsPageClient({ tutorials, total, totalPages, cate
 
       {/* Filter bar */}
       <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '2rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: 10, border: '1px solid var(--border)', alignItems: 'center' }}>
-        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Filter by:</span>
+        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>{t('filterBy')}</span>
 
         {/* Category filter */}
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
           <Link href={buildUrl({ category: '', page: '1' })}
             style={{ padding: '0.3rem 0.75rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none', background: !categorySlug ? '#16a34a' : 'var(--bg-primary)', color: !categorySlug ? 'white' : 'var(--text-secondary)', border: `1.5px solid ${!categorySlug ? '#16a34a' : 'var(--border)'}` }}>
-            All
+            {t('all')}
           </Link>
           {categories.map(cat => (
             <Link key={cat._id} href={buildUrl({ category: cat.slug, page: '1' })}
@@ -69,7 +69,7 @@ export default function TutorialsPageClient({ tutorials, total, totalPages, cate
         <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           {page > 1 && (
             <Link href={buildUrl({ page: String(page - 1) })}
-              style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>← Prev</Link>
+              style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{t('prev')}</Link>
           )}
           {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
             const pg = totalPages <= 7 ? i + 1 : page <= 4 ? i + 1 : page >= totalPages - 3 ? totalPages - 6 + i : page - 3 + i;
@@ -82,7 +82,7 @@ export default function TutorialsPageClient({ tutorials, total, totalPages, cate
           })}
           {page < totalPages && (
             <Link href={buildUrl({ page: String(page + 1) })}
-              style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Next →</Link>
+              style={{ padding: '0.5rem 1rem', border: '1.5px solid var(--border)', borderRadius: 6, textDecoration: 'none', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>{t('next')}</Link>
           )}
         </div>
       )}

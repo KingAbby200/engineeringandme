@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 
 export default function PageNavigation({ pageUrl, prevPage, nextPage, category }) {
   return (
@@ -105,7 +105,7 @@ export default function PageNavigation({ pageUrl, prevPage, nextPage, category }
             justifyContent: 'center',
           }}
         >
-          <span style={{ fontSize: '1.5rem' }}>🎉</span>
+          <CheckCircle size={32} color="#16a34a" />
           <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#16a34a' }}>Tutorial Complete!</span>
           <Link href={`/tutorials/${category}`} style={{ fontSize: '0.8rem', color: '#6b7280', textDecoration: 'none' }}>
             Browse more →

@@ -49,10 +49,10 @@ export default function DashboardPage() {
         <Image src={avatarUrl} alt={user?.name || ''} width={64} height={64} style={{ borderRadius: '50%', border: '3px solid #16a34a', objectFit: 'cover' }} />
         <div>
           <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#111827', margin: 0 }}>
-            Welcome back, {user?.name?.split(' ')[0]}! 👋
+            Welcome back, {user?.name?.split(' ')[0]}!
           </h1>
           <p style={{ color: '#6b7280', margin: '0.25rem 0 0', fontSize: '0.9rem' }}>
-            {user?.streak?.current > 0 ? `🔥 ${user.streak.current}-day streak! Keep it up!` : "Start learning today to build your streak!"}
+            {user?.streak?.current > 0 ? `${user.streak.current}-day streak! Keep it up!` : "Start learning today to build your streak!"}
           </p>
         </div>
         {user?.streak?.current >= 3 && (

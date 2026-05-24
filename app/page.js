@@ -8,7 +8,7 @@ import NewsletterForm from '@/components/ui/NewsletterForm';
 //import AdUnit from '@/components/ui/AdUnit';
 import AdsterraNative from '@/components/ui/AdsterraNative';
 import CategoryCard from '@/components/ui/CategoryCard';
-import { BookOpen, Zap, Trophy, Users, ArrowRight, CheckCircle } from 'lucide-react';
+import { BookOpen, Zap, Trophy, Users, ArrowRight, CheckCircle, ClipboardList, BarChart3, Clock, Globe, Sparkles } from 'lucide-react';
 
 async function getData() {
   function normalize(obj) {
@@ -138,15 +138,15 @@ export default async function HomePage() {
           <p style={{ color: '#6b7280', textAlign: 'center', margin: '0 0 2.5rem' }}>Built for serious engineering learners</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {[
-              { icon: '📚', title: 'Structured Learning', desc: 'Organized tutorials with clear progression from basic to advanced concepts.' },
-              { icon: '🏆', title: 'Knowledge Quizzes', desc: 'Test your understanding at the end of each tutorial page with interactive quizzes.' },
-              { icon: '📊', title: 'Progress Tracking', desc: 'Track your learning journey with detailed progress reports and completion stats.' },
-              { icon: '🔥', title: 'Daily Streaks', desc: 'Build consistent habits with daily login streaks and learning momentum.' },
-              { icon: '🌍', title: 'All Disciplines', desc: 'Coverage across Electrical, Civil, Mechanical, Chemical, Computer Engineering and more.' },
-              { icon: '🆓', title: 'Completely Free', desc: 'All tutorials are free. No paywalls, no subscriptions, no hidden fees — ever.' },
+              { icon: <BookOpen size={24} color="#16a34a" />, title: 'Structured Learning', desc: 'Organized tutorials with clear progression from basic to advanced concepts.' },
+              { icon: <ClipboardList size={24} color="#16a34a" />, title: 'Knowledge Quizzes', desc: 'Test your understanding at the end of each tutorial page with interactive quizzes.' },
+              { icon: <BarChart3 size={24} color="#16a34a" />, title: 'Progress Tracking', desc: 'Track your learning journey with detailed progress reports and completion stats.' },
+              { icon: <Clock size={24} color="#16a34a" />, title: 'Daily Streaks', desc: 'Build consistent habits with daily login streaks and learning momentum.' },
+              { icon: <Globe size={24} color="#16a34a" />, title: 'All Disciplines', desc: 'Coverage across Electrical, Civil, Mechanical, Chemical, Computer Engineering and more.' },
+              { icon: <Sparkles size={24} color="#16a34a" />, title: 'Completely Free', desc: 'All tutorials are free. No paywalls, no subscriptions, no hidden fees — ever.' },
             ].map(item => (
               <div key={item.title} style={{ padding: '1.5rem', background: 'white', borderRadius: 10, border: '1.5px solid #e5e7eb' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{item.icon}</div>
+                <div style={{ marginBottom: '0.75rem' }}>{item.icon}</div>
                 <h3 style={{ fontSize: '1rem', fontWeight: 600, color: '#111827', margin: '0 0 0.4rem' }}>{item.title}</h3>
                 <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: 0, lineHeight: 1.6 }}>{item.desc}</p>
               </div>

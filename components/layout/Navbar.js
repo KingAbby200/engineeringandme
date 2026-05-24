@@ -179,7 +179,7 @@ export default function Navbar() {
                 ))}
                 <div style={{ borderTop: '1px solid var(--bg-secondary)' }}>
                   <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.6rem 1rem', fontSize: '0.875rem', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
-                    <LogOut size={15} /> Sign Out
+                    <LogOut size={15} /> {t('logout')}
                   </button>
                 </div>
               </div>
@@ -207,7 +207,7 @@ export default function Navbar() {
             </Link>
           ))}
           <form onSubmit={handleSearch} style={{ marginTop: '0.75rem', display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search tutorials..." style={{ flex: 1, padding: '0.5rem 0.75rem', border: '1.5px solid #e5e7eb', borderRadius: 6, fontSize: '0.875rem', outline: 'none', fontFamily: 'IBM Plex Sans, sans-serif' }} />
+            <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder={t('searchTutorials')} style={{ flex: 1, padding: '0.5rem 0.75rem', border: '1.5px solid #e5e7eb', borderRadius: 6, fontSize: '0.875rem', outline: 'none', fontFamily: 'IBM Plex Sans, sans-serif' }} />
             <button type="submit" style={{ padding: '0.5rem 0.75rem', background: '#16a34a', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer' }}><Search size={16} /></button>
           </form>
           {user && (
@@ -230,8 +230,8 @@ export default function Navbar() {
           )}
           {!user && (
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', borderTop: '1px solid #f3f4f6', paddingTop: '0.75rem' }}>
-              <Link href="/login" onClick={() => setMobileOpen(false)} style={{ flex: 1, padding: '0.6rem', textAlign: 'center', border: '1.5px solid #e5e7eb', borderRadius: 6, color: '#374151', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>Login</Link>
-              <Link href="/signup" onClick={() => setMobileOpen(false)} style={{ flex: 1, padding: '0.6rem', textAlign: 'center', background: '#16a34a', color: 'white', borderRadius: 6, textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600 }}>Sign Up</Link>
+              <Link href="/login" onClick={() => setMobileOpen(false)} style={{ flex: 1, padding: '0.6rem', textAlign: 'center', border: '1.5px solid #e5e7eb', borderRadius: 6, color: '#374151', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>{t('login')}</Link>
+              <Link href="/signup" onClick={() => setMobileOpen(false)} style={{ flex: 1, padding: '0.6rem', textAlign: 'center', background: '#16a34a', color: 'white', borderRadius: 6, textDecoration: 'none', fontSize: '0.875rem', fontWeight: 600 }}>{t('signup')}</Link>
             </div>
           )}
         </div>

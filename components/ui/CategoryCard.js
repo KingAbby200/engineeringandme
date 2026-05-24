@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { Layers } from 'lucide-react';
 
 export default function CategoryCard({ category }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,7 +25,9 @@ export default function CategoryCard({ category }) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{category.icon || '⚙️'}</div>
+        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
+          {category.icon || <Layers size={32} color="#16a34a" />}
+        </div>
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: 0, lineHeight: 1.3 }}>
           {category.name}
         </h3>

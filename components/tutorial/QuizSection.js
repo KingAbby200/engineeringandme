@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useAuthStore } from '@/lib/store/authStore';
-import { CheckCircle, XCircle, Trophy, RefreshCw, Lock } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy, RefreshCw, Lock, ThumbsUp, BookOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -78,8 +78,9 @@ export default function QuizSection({ quiz, pageId }) {
             <div style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.2rem' }}>{results.score}/{results.total} correct</div>
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ fontWeight: 600, color: percentage >= 70 ? '#166534' : '#991b1b', margin: '0 0 0.25rem' }}>
-              {percentage >= 90 ? '🎉 Excellent!' : percentage >= 70 ? '👍 Good job!' : '📚 Keep studying!'}
+            <p style={{ fontWeight: 600, color: percentage >= 70 ? '#166534' : '#991b1b', margin: '0 0 0.25rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              {percentage >= 90 ? <CheckCircle size={16} color="#16a34a" /> : percentage >= 70 ? <ThumbsUp size={16} color="#16a34a" /> : <BookOpen size={16} color="#16a34a" />} 
+              {percentage >= 90 ? 'Excellent!' : percentage >= 70 ? 'Good job!' : 'Keep studying!'}
             </p>
             <p style={{ color: '#6b7280', fontSize: '0.875rem', margin: 0 }}>
               {percentage >= 70 ? 'You\'ve passed this quiz. Move on to the next page!' : 'Review the material and try again.'}

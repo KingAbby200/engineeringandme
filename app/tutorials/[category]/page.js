@@ -6,7 +6,7 @@ import TutorialCard from '@/components/tutorial/TutorialCard';
 import AdsterraNative from '@/components/ui/AdsterraNative';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BookOpen, Filter } from 'lucide-react';
+import { BookOpen, Filter, Layers } from 'lucide-react';
 
 export async function generateMetadata({ params }) {
   const { category } = await params;
@@ -72,7 +72,7 @@ export default async function CategoryPage({ params, searchParams }) {
           {allCats.map(c => (
             <Link key={c._id} href={`/tutorials/${c.slug}`}
               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', fontSize: '0.875rem', textDecoration: 'none', color: c.slug === category ? '#16a34a' : '#374151', background: c.slug === category ? '#f0fdf4' : 'white', borderLeft: `3px solid ${c.slug === category ? '#16a34a' : 'transparent'}`, borderBottom: '1px solid #f3f4f6', fontWeight: c.slug === category ? 600 : 400, transition: 'background 0.1s' }}>
-              <span style={{ fontSize: '1rem' }}>{c.icon || '⚙️'}</span>
+              <Layers size={16} color={c.slug === category ? '#16a34a' : '#9ca3af'} />
               <span style={{ lineHeight: 1.3 }}>{c.name}</span>
             </Link>
           ))}
@@ -83,7 +83,7 @@ export default async function CategoryPage({ params, searchParams }) {
           {/* Header */}
           <div style={{ marginBottom: '1.75rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '2rem' }}>{cat.icon || '⚙️'}</span>
+              <Layers size={28} color="#16a34a" />
               <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', margin: 0 }}>{cat.name}</h1>
             </div>
             {cat.description && <p style={{ color: '#6b7280', margin: '0 0 1rem', lineHeight: 1.7 }}>{cat.description}</p>}
