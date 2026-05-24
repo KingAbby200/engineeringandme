@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { CheckCircle, XCircle, Eye, Loader, BookOpen } from 'lucide-react';
+import { CheckCircle, XCircle, Eye, Loader, BookOpen, User, FolderOpen, FileText, Tag, Calendar } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminPendingPage() {
@@ -74,11 +74,11 @@ export default function AdminPendingPage() {
                 </div>
                 <p style={{ color: '#6b7280', margin: '0 0 0.5rem', fontSize: '0.85rem', lineHeight: 1.5 }}>{t.description}</p>
                 <div style={{ display: 'flex', gap: '1rem', fontSize: '0.775rem', color: '#94a3b8', flexWrap: 'wrap' }}>
-                  <span>👤 {t.author?.name}</span>
-                  <span>📁 {t.category?.name}</span>
-                  <span>📄 {t.totalPages} page{t.totalPages !== 1 ? 's' : ''}</span>
-                  <span>🏷 {t.tags?.join(', ') || 'No tags'}</span>
-                  <span>📅 {new Date(t.createdAt).toLocaleDateString()}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><User size={14} />{t.author?.name}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><FolderOpen size={14} />{t.category?.name}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><FileText size={14} />{t.totalPages} page{t.totalPages !== 1 ? 's' : ''}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Tag size={14} />{t.tags?.join(', ') || 'No tags'}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Calendar size={14} />{new Date(t.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0, flexWrap: 'wrap' }}>

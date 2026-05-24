@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Plus, Edit2, Trash2, X, Loader, Save, FolderOpen } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Loader, Save, FolderOpen, Info, Layers } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const ICONS = ['⚡', '🏗️', '⚙️', '💻', '🧪', '🛢️', '✈️', '🏛️', '🫀', '🌿', '🔬', '🌊', '🔋', '📡', '🔩'];
+const ICONS = ['Zap', 'Civil', 'Mechanical', 'Computer', 'Chemical', 'Petroleum', 'Aerospace', 'Structural', 'Biomedical', 'Environmental', 'Sensors', 'Ocean', 'Battery', 'Comms', 'Hardware'];
 const COLORS = ['#16a34a', '#2563eb', '#dc2626', '#d97706', '#7c3aed', '#db2777', '#0891b2', '#059669', '#64748b', '#0f172a'];
 
 export default function AdminCategoriesPage() {
@@ -11,7 +11,7 @@ export default function AdminCategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: '', description: '', icon: '⚙️', color: '#16a34a', order: 0 });
+  const [form, setForm] = useState({ name: '', description: '', icon: '', color: '#16a34a', order: 0 });
   const [submitting, setSubmitting] = useState(false);
 
   const fetchCats = async () => {
@@ -24,8 +24,8 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => { fetchCats(); }, []);
 
-  const openCreate = () => { setEditing(null); setForm({ name: '', description: '', icon: '⚙️', color: '#16a34a', order: categories.length }); setShowForm(true); };
-  const openEdit = (cat) => { setEditing(cat._id); setForm({ name: cat.name, description: cat.description || '', icon: cat.icon || '⚙️', color: cat.color || '#16a34a', order: cat.order || 0 }); setShowForm(true); };
+  const openCreate = () => { setEditing(null); setForm({ name: '', description: '', icon: '', color: '#16a34a', order: categories.length }); setShowForm(true); };
+  const openEdit = (cat) => { setEditing(cat._id); setForm({ name: cat.name, description: cat.description || '', icon: cat.icon || '', color: cat.color || '#16a34a', order: cat.order || 0 }); setShowForm(true); };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,7 +64,7 @@ export default function AdminCategoriesPage() {
 
       {/* Seed defaults button */}
       <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.825rem', color: '#92400e', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-        <span>💡 <strong>Tip:</strong> Add all engineering disciplines here. They'll appear as navigation filters throughout the site.</span>
+        <Info size={16} /> <strong>Tip:</strong> Add all engineering disciplines here. They'll appear as navigation filters throughout the site.
       </div>
 
       {/* Form */}
@@ -129,7 +129,9 @@ export default function AdminCategoriesPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
           {categories.map(cat => (
             <div key={cat._id} style={{ background: 'white', border: '1.5px solid #e5e7eb', borderRadius: 10, padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: `${cat.color}18`, border: `2px solid ${cat.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>{cat.icon || '⚙️'}</div>
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: `${cat.color}18`, border: `2px solid ${cat.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+                <Layers size={20} color={cat.color || '#16a34a'} />
+              </div>
               <div style={{ flex: 1 }}>
                 <p style={{ fontWeight: 700, color: '#111827', margin: '0 0 0.15rem' }}>{cat.name}</p>
                 <p style={{ fontSize: '0.8rem', color: '#9ca3af', margin: 0 }}>/tutorials/{cat.slug} · {cat.tutorialCount || 0} tutorials · Order: {cat.order}</p>

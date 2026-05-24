@@ -50,7 +50,7 @@ export default function SignupPage() {
       const res = await fetch('/api/auth/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: form.email, otp }) });
       const data = await res.json();
       if (res.ok) {
-        toast.success('Account verified! Welcome aboard 🎉');
+        toast.success('Account verified! Welcome aboard');
         router.push('/dashboard');
       } else toast.error(data.error);
     } catch { toast.error('Something went wrong'); }
@@ -124,7 +124,7 @@ export default function SignupPage() {
           ) : (
             <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ textAlign: 'center', padding: '1rem', background: '#f0fdf4', borderRadius: 8, border: '1px solid #bbf7d0' }}>
-                <p style={{ fontSize: '0.875rem', color: '#166534', margin: 0 }}>📧 Check your inbox and spam folder for the verification code.</p>
+                <p style={{ fontSize: '0.875rem', color: '#166534', margin: 0 }}>Check your inbox and spam folder for the verification code.</p>
               </div>
               <div>
                 <label style={labelStyle}>6-Digit OTP Code</label>

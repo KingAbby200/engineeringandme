@@ -1,6 +1,6 @@
-'use client';
+use client';
 import { useState } from 'react';
-import { Save, Loader, Shield, Bell, Globe, Database } from 'lucide-react';
+import { Save, Loader, Shield, Bell, Globe, Database, Settings, AlertTriangle, BookOpen } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function AdminSettingsPage() {
@@ -101,7 +101,7 @@ export default function AdminSettingsPage() {
           </div>
 
           <div style={{ padding: '1rem', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-            <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#374151', margin: '0 0 0.5rem' }}>⚙️ Environment Variable Settings</p>
+            <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#374151', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Settings size={14} />Environment Variable Settings</p>
             <p style={{ fontSize: '0.775rem', color: '#64748b', margin: '0 0 0.75rem', lineHeight: 1.6 }}>
               The following settings are controlled via your <code style={{ background: '#f0fdf4', padding: '0.1rem 0.3rem', borderRadius: 3, color: '#16a34a', fontSize: '0.75rem' }}>.env.local</code> file.
               Update them there and redeploy.
@@ -165,7 +165,7 @@ export default function AdminSettingsPage() {
           </form>
           <div style={{ marginTop: '2rem', padding: '1rem', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: 8 }}>
             <p style={{ fontSize: '0.8rem', color: '#92400e', margin: 0, lineHeight: 1.6 }}>
-              <strong>⚠️ Important:</strong> The admin email/password in <code>.env.local</code> (<code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code>) are used for the initial login. After first login, you can change your password here and it will be stored securely in the database.
+              <strong style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><AlertTriangle size={14} />Important:</strong> The admin email/password in <code>.env.local</code> (<code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code>) are used for the initial login. After first login, you can change your password here and it will be stored securely in the database.
             </p>
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function AdminSettingsPage() {
           </div>
 
           <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8 }}>
-            <p style={{ fontSize: '0.8rem', color: '#166534', margin: '0 0 0.5rem', fontWeight: 600 }}>📖 Documentation</p>
+            <p style={{ fontSize: '0.8rem', color: '#166534', margin: '0 0 0.5rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}><BookOpen size={14} />Documentation</p>
             <p style={{ fontSize: '0.775rem', color: '#166534', margin: 0, lineHeight: 1.7 }}>
               Refer to <code>DEPLOYMENT.md</code> in the project root for full setup instructions, environment variables reference, MongoDB configuration, Cloudinary setup, and Vercel deployment guide.
             </p>

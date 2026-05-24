@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Layers } from 'lucide-react';
 import TutorialCard from '@/components/tutorial/TutorialCard';
 import { useLanguageStore, getTranslation } from '@/lib/store/languageStore';
 
@@ -35,7 +35,7 @@ export default function TutorialsPageClient({ tutorials, total, totalPages, cate
           {categories.map(cat => (
             <Link key={cat._id} href={buildUrl({ category: cat.slug, page: '1' })}
               style={{ padding: '0.3rem 0.75rem', borderRadius: 20, fontSize: '0.8rem', fontWeight: 500, textDecoration: 'none', background: categorySlug === cat.slug ? '#16a34a' : 'var(--bg-primary)', color: categorySlug === cat.slug ? 'white' : 'var(--text-secondary)', border: `1.5px solid ${categorySlug === cat.slug ? '#16a34a' : 'var(--border)'}`, display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              <span>{cat.icon}</span> {cat.name}
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}><Layers size={14} color={cat.color || '#16a34a'} /> {cat.name}</span>
             </Link>
           ))}
         </div>
