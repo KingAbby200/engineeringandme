@@ -2,10 +2,27 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Layers } from 'lucide-react';
+import {
+  Zap, Building, Cog, Cpu, FlaskConical, Droplet, Rocket, Hammer,
+  Microscope, Leaf, Layers
+} from 'lucide-react';
+
+const ICON_MAP = {
+  zap: Zap,
+  bridge: Building,
+  cog: Cog,
+  laptop: Cpu,
+  flask: FlaskConical,
+  oil: Droplet,
+  rocket: Rocket,
+  building: Hammer,
+  microscope: Microscope,
+  leaf: Leaf,
+};
 
 export default function CategoryCard({ category }) {
   const [isHovered, setIsHovered] = useState(false);
+  const IconComponent = ICON_MAP[category.icon] || Layers;
 
   return (
     <Link href={`/tutorials/${category.slug}`} style={{ textDecoration: 'none' }}>
@@ -25,8 +42,8 @@ export default function CategoryCard({ category }) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
-          {category.icon || <Layers size={32} color="#16a34a" />}
+        <div style={{ marginBottom: '0.5rem' }}>
+          <IconComponent size={32} color={category.color || '#16a34a'} />
         </div>
         <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: '#111827', margin: 0, lineHeight: 1.3 }}>
           {category.name}
